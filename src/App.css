@@ -23,6 +23,19 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: #76c5f2 !important;
+}
+
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #adb5bd !important;
+  pointer-events: none !important;
+  background-color: transparent !important;
+}
+
+.dropdown-item {
+  color: #152536 !important;
+}
 
 .App-link {
   color: #61dafb;
@@ -35,4 +48,53 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+.card-container.card {
+  max-width: 350px !important;
+  padding: 30px 30px;
+}
+.card {
+  background-color: #f7f7f7;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.profile-img-card {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+.btn-primary {
+  color: #152536 !important;
+  background-color: #76C5F2 !important;
+  border-color: #76C5F2 !important;
+}
+
+.btn-primary:hover {
+  color: #152536 !important;
+  background-color: #00A6F6FF !important;
+  border-color: #00A6F6FF !important;
+}
+
+.form-control {
+  color: #152536 !important;
+}
+
+.default-color {
+  color: #152536 !important;
 }
