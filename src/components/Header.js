@@ -2,6 +2,7 @@ import logo from '../images/logo.png';
 import React from 'react';
 import AuthService from "../services/auth.service";
 import {Link} from "react-router-dom";
+import {FormattedMessage} from "react-intl";
 
 class Header extends React.Component {
     constructor(props) {
@@ -21,13 +22,13 @@ class Header extends React.Component {
 
     getVisible() {
         if (this.state.login) {
-            return('');
+            return ('');
         } else {
             return ('invisible')
         }
     }
 
-    handleLogout(){
+    handleLogout() {
         AuthService.logout();
         window.location.assign("/");
     }
@@ -45,23 +46,40 @@ class Header extends React.Component {
                             aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className={"collapse navbar-collapse position-fixed end-0 me-4 " + this.getVisible()} id="navbarNavDropdown">
+                    <div className={"collapse navbar-collapse position-fixed end-0 me-4 " + this.getVisible()}
+                         id="navbarNavDropdown">
                         <ul className="navbar-nav">
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle fw-bold" href="src/components/Header#" id="navbarDropdownMenuLink"
+                                <a className="nav-link dropdown-toggle fw-bold" href="src/components/Header#"
+                                   id="navbarDropdownMenuLink"
                                    role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     {this.state.login}
                                 </a>
-                                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a className="dropdown-item" href="src/components/Header#">Профиль</a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()} href="src/components/Header#">Сотрудники</a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()} href="src/components/Header#">Компании</a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()} href="">Журнал</a></li>
+                                <ul className="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a className="dropdown-item" href="src/components/Header#">
+                                        <FormattedMessage id="header_profile"/>
+                                    </a></li>
+                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
+                                           href="src/components/Header#">
+                                        <FormattedMessage id="header_users"/>
+                                    </a></li>
+                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
+                                           href="src/components/Header#">
+                                        <FormattedMessage id="header_companies"/>
+                                    </a></li>
+                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
+                                           href="">
+                                        <FormattedMessage id="header_log"/>
+                                    </a></li>
                                     <li>
                                         <hr className="dropdown-divider"/>
                                     </li>
-                                    <li><a className="dropdown-item fw-bold default-color" onClick={this.handleLogout} href="">Выход</a></li>
+                                    <li><a className="dropdown-item fw-bold default-color" onClick={this.handleLogout}
+                                           href="">
+                                        <FormattedMessage id="header_logout"/>
+                                    </a></li>
                                 </ul>
                             </li>
                         </ul>

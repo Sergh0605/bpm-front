@@ -18,14 +18,12 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.logOut = this.logOut.bind(this);
-        if (AuthService.getValidToken()) {
-            const user = AuthService.getCurrentUser();
-            if (user) {
-                this.state = {
-                    currentUserLogin: user.login,
-                    currentUserRoles: user.roles
-                };
-            }
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            this.state = {
+                currentUserLogin: user.login,
+                currentUserRoles: user.roles
+            };
         } else {
             this.state = {
                 currentUserLogin: undefined,

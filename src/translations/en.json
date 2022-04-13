@@ -1,0 +1,16 @@
+{
+	"header_companies": "Companies",
+	"header_log": "Activity Log",
+	"header_logout": "Logout",
+	"header_profile": "Profile",
+	"header_users": "Users",
+	"login_label": "Log In",
+	"login_login": "Login",
+	"login_login-button": "SignIn",
+	"login_password": "Password",
+	"project-list_col-code": "Code",
+	"project-list_col-company": "Company",
+	"project-list_col-editTime": "Edit time",
+	"project-list_col-name": "Project name",
+	"project-list_col-stage": "Stage"
+}

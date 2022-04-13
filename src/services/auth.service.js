@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import {useNavigate} from "react-router";
 
 const API_URL = "http://localhost:8090/api/user/";
 
@@ -45,8 +46,11 @@ class AuthService {
                 if (response.data.accessToken) {
                     localStorage.setItem("tokens", JSON.stringify(response.data));
                 }
-                return response.data;
-            });
+            },
+                error => {
+                    localStorage.removeItem("tokens");
+                    window.location.assign("/");
+                });
     }
 
     getCurrentUser() {
