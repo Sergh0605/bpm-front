@@ -1,15 +1,23 @@
+import pdfIcon from '../../images/pdf.png';
+import deleteIcon from '../../images/delete.png';
 import React from 'react';
 import {FormattedMessage} from "react-intl";
 import ProjectService from "../../services/project.service";
 import AssembleButton from "../assemble-button.component";
+import IconButton from "../icon-button.component";
+import AuthService from "../../services/auth.service";
 
 class ProjectList extends React.Component {
     // eslint-disable-next-line no-useless-constructor
     constructor(props) {
         super(props);
         this.refresh = this.refresh.bind(this);
+        this.assemble = this.assemble.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
+        this.getPdf = this.getPdf.bind(this);
         this.state = {
-            data: ""
+            data: "",
+            editable: this.props.editable
         };
     }
 
@@ -23,9 +31,27 @@ class ProjectList extends React.Component {
                 this.setState({
                     data: response.data
                 });
-            },
-            error => {
-                // add navigate to error page
+            }
+        );
+    }
+
+    assemble(projectId) {
+        ProjectService.assemble(projectId).then(this.refresh);
+    }
+
+    deleteProject(projectId) {
+        ProjectService.delete(projectId).then(this.refresh);
+    }
+
+    getPdf(projectId) {
+        ProjectService.getPdf(projectId)
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'project.pdf'); //TODO customize name
+                document.body.appendChild(link);
+                link.click();
             }
         );
     }
@@ -65,7 +91,9 @@ class ProjectList extends React.Component {
                             <td>{project.stage.name}</td>
                             <td>{project.company.name}</td>
                             <td>{project.editTime}</td>
-                            <td><AssembleButton projectId={project.id} assembled={!project.reassemblyRequired} refresh={this.refresh}/></td>
+                            <td><AssembleButton disabled={!this.state.editable} objectId={project.id} assembled={!project.reassemblyRequired} onClickHandler={this.assemble}/></td>
+                            <td><IconButton objectId={project.id} disabled={false} icon={pdfIcon} onClickHandler={this.getPdf}/></td>
+                            <td><IconButton objectId={project.id} disabled={!this.state.editable} icon={deleteIcon} onClickHandler={this.deleteProject}/></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -78,16 +106,6 @@ class ProjectList extends React.Component {
 
     render() {
         return (this.getTable())
-    }
-}
-
-class TableRow extends React.Component {
-    render() {
-        return (
-            <h1>
-                assemble
-            </h1>
-        )
     }
 }
 

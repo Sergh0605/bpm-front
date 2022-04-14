@@ -1,8 +1,7 @@
 import axios from "axios";
-import authHeader from "./auth-header";
-import {useNavigate} from "react-router";
-
-const API_URL = "http://localhost:8090/api/user/";
+import api from "./api";
+import TokenService from "./token.service";
+const API_URL = "http://localhost:8090/api/user";
 
 const parseJwt = (token) => {
     try {
@@ -15,49 +14,32 @@ const parseJwt = (token) => {
 class AuthService {
     login(login, password) {
         return axios
-            .post(API_URL + "auth", {
+            .post(API_URL + "/auth", {
                 login,
                 password
             })
             .then(response => {
                 if (response.data.accessToken) {
-                    localStorage.setItem("tokens", JSON.stringify(response.data));
+                    TokenService.setTokens(response.data);
                 }
                 return response.data;
             });
     }
 
     logout() {
-        const token = this.getValidToken();
-        localStorage.removeItem("tokens")
-        return axios
-            .post(API_URL + "logout", {}, {headers: {Authorization: 'Bearer ' + token}})
-            .then(() => {
-            });
-    }
-
-    refresh() {
-        const token = JSON.parse(localStorage.getItem('tokens')).refreshToken;
-        return axios
-            .post(API_URL + "refresh_token_auth", {
-                token,
+        return api
+            .post("/user/logout", {}).then(() => {
+                TokenService.removeTokens();
+                window.location.assign("/login");
             })
-            .then(response => {
-                if (response.data.accessToken) {
-                    localStorage.setItem("tokens", JSON.stringify(response.data));
-                }
-            },
-                error => {
-                    localStorage.removeItem("tokens");
-                    window.location.assign("/");
-                });
+
     }
 
     getCurrentUser() {
-        const tokens = localStorage.getItem('tokens');
+        const tokens = TokenService.getTokens();
         if (tokens) {
-            const accessToken = JSON.parse(tokens).accessToken;
-            const refreshToken = JSON.parse(tokens).refreshToken;
+            const accessToken = TokenService.getLocalAccessToken();
+            const refreshToken = TokenService.getLocalRefreshToken();
             const decodedAccessJwt = parseJwt(accessToken);
             const decodedRefreshJwt = parseJwt(refreshToken);
             return {
@@ -69,22 +51,7 @@ class AuthService {
             }
         }
     }
-
-    getValidToken() {
-        const user = this.getCurrentUser();
-        if (user) {
-            if (user.accessExpDate && user.accessExpDate * 1000 > Date.now()) {
-                return user.accessToken;
-            } else {
-                if (user.refreshExpDate && user.refreshExpDate * 1000 > Date.now()) {
-                    this.refresh();
-                    return this.getCurrentUser().accessToken;
-                }
-            }
-        }
-        return undefined
-    }
-
 }
+
 
 export default new AuthService();

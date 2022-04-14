@@ -30,7 +30,6 @@ class Header extends React.Component {
 
     handleLogout() {
         AuthService.logout();
-        window.location.assign("/");
     }
 
     render() {

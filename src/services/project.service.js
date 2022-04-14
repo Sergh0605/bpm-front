@@ -1,12 +1,18 @@
-import axios from 'axios';
-import authHeader from './auth-header';
-const API_URL = 'http://localhost:8090/api/project';
+import api from "./api";
 class ProjectService {
     getAll() {
-        return axios.get(API_URL, { headers: authHeader() });
+        return api.get("/project");
     }
     assemble(id) {
-        return axios.post(API_URL + "/" + id + "/assemble", {},{ headers: authHeader() });
+        return api.post("/project/" + id + "/assemble", {});
+    }
+
+    delete(id) {
+        return api.post("/project/" + id + "/disable", {});
+    }
+
+    getPdf(id) {
+        return api.get("/project/" + id + "/download", {responseType: 'blob'});
     }
 }
 export default new ProjectService();

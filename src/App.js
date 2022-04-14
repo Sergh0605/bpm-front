@@ -36,13 +36,17 @@ class App extends React.Component {
         AuthService.logout();
     }
 
+    isEditable() {
+        return this.state.currentUserRoles.includes("EDITOR");
+    }
+
     render() {
         return (
             <div>
                 <Header userData={this.state}/>
                 <Routes>
                     <Route path="/login" element={<LoginComponent/>}/>
-                    <Route path="/" element={<UserAuthCheck comp={<ProjectList/>}/>}/>
+                    <Route path="/" element={<UserAuthCheck comp={<ProjectList editable={this.isEditable()}/>}/>}/>
                 </Routes>
             </div>
         )

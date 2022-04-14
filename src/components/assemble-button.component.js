@@ -5,40 +5,28 @@ import {Link} from "react-router-dom";
 import {FormattedMessage} from "react-intl";
 import ProjectService from "../services/project.service";
 import {wait} from "@testing-library/user-event/dist/utils";
+import IconButton from "./icon-button.component";
 
 class AssembleButton extends React.Component {
+    // eslint-disable-next-line no-useless-constructor
     constructor(props) {
         super(props);
-        this.handleAssemble = this.handleAssemble.bind(this);
-        this.state = {projectId: props.projectId, documentId: props.documentId, assembled: props.assembled};
-        console.log(this.state)
-    }
-
-    handleAssemble() {
-        console.log(this.state)
-        if (!this.state.assembled) {
-            if (this.state.projectId) {
-                ProjectService.assemble(this.state.projectId).then(this.props.refresh);
-            } else if (this.state.documentId) {
-
-            }
-        }
     }
 
     render() {
         let image;
-        let disabled;
-        if (this.state.assembled) {
+        let localDisabled = false
+        if (this.props.assembled) {
             image = assembledIcon;
-            disabled = "disabled"
         } else {
             image = needToAssemble;
-            disabled = "";
+        }
+        if (this.props.disabled || this.props.assembled) {
+            localDisabled = true
         }
         return (
-            <button type="button" className={"btn btn-link " + disabled} onClick={this.handleAssemble}>
-                <img src={image} alt="" width="40" height="40" />
-            </button>
+            <IconButton objectId={this.props.objectId} disabled={localDisabled} icon={image} onClickHandler={this.props.onClickHandler}>
+            </IconButton>
         )
     }
 }

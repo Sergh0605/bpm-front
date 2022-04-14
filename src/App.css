@@ -102,3 +102,19 @@ label {
 .default-color {
   color: #152536 !important;
 }
+
+.btn-outline-info {
+  color: rgba(13, 202, 240, 0) !important;
+  border-color: rgb(221, 225, 229) !important;
+}
+
+.btn-outline-info.disabled {
+  color: rgba(13, 202, 240, 0) !important;
+  border-color: rgba(221, 225, 229, 0) !important;
+}
+
+.btn-outline-info:hover {
+  color: #000;
+  background-color: rgb(221, 225, 229) !important;
+  border-color: rgb(0, 0, 0) !important;
+}

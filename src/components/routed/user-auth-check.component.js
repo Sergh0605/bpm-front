@@ -9,7 +9,7 @@ export default class UserAuthCheck extends Component {
         };
     }
     render() {
-        if (!AuthService.getValidToken()) {
+        if (!AuthService.getCurrentUser()) {
             return (
                 <Navigate to="/login"/>
             )
