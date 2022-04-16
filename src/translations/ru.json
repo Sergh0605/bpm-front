@@ -12,5 +12,20 @@
 	"project-list_col-company": "Исполнитель",
 	"project-list_col-editTime": "Дата изменения",
 	"project-list_col-name": "Название",
-	"project-list_col-stage": "Стадия"
+	"project-list_col-stage": "Стадия",
+	"project-list_head": "Проекты",
+	"project-list_search-button": "Поиск",
+	"project-page_code": "Код проекта",
+	"project-page_date": "Дата выпуска",
+	"project-page_name": "Имя проекта",
+	"project_page-chief": "ГИП",
+	"project_page-company": "Компания исполнитель",
+	"project_page-controller": "Н. контроллер",
+	"project_page-designer": "Выполнил",
+	"project_page-object-address": "Адрес объекта",
+	"project_page-object-name": "Наименование объекта",
+	"project_page-stage": "Стадия",
+	"project_page-supervisor": "Проверил",
+	"project_page-volume-name": "Наименование тома",
+	"project_page-volume-number": "Номер тома"
 }

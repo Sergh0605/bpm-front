@@ -118,3 +118,35 @@ label {
   background-color: rgb(221, 225, 229) !important;
   border-color: rgb(0, 0, 0) !important;
 }
+
+.table {
+  --bs-table-hover-bg: rgba(118, 197, 242, 0.32) !important;
+}
+
+.code-col {
+  width: 10%;
+}
+
+.name-col {
+  width: 50%;
+}
+
+.stage-col {
+  width: 10%;
+}
+
+.company-col {
+  width: 10%;
+}
+
+.time-col {
+  width: 10%;
+}
+
+.button-col {
+  width: 45px;
+}
+
+.half {
+  width: 50%;
+}

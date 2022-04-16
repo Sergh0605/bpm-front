@@ -12,5 +12,20 @@
 	"project-list_col-company": "Company",
 	"project-list_col-editTime": "Edit time",
 	"project-list_col-name": "Project name",
-	"project-list_col-stage": "Stage"
+	"project-list_col-stage": "Stage",
+	"project-list_head": "Projects",
+	"project-list_search-button": "Search",
+	"project-page_code": "Project code",
+	"project-page_date": "Release date",
+	"project-page_name": "Project Name",
+	"project_page-chief": "Chief",
+	"project_page-company": "Company",
+	"project_page-controller": "Controller",
+	"project_page-designer": "Designer",
+	"project_page-object-address": "Object address",
+	"project_page-object-name": "Object name",
+	"project_page-stage": "Stage",
+	"project_page-supervisor": "Supervisor",
+	"project_page-volume-name": "Volume name",
+	"project_page-volume-number": "Volume number"
 }
