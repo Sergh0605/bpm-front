@@ -27,5 +27,8 @@
 	"project_page-stage": "Стадия",
 	"project_page-supervisor": "Проверил",
 	"project_page-volume-name": "Наименование тома",
-	"project_page-volume-number": "Номер тома"
+	"project_page-volume-number": "Номер тома",
+	"project_page-company-choice": "Выберите компанию",
+	"project_page-stage-choice": "Выберите стадию",
+	"project_page-user-choice": "Выберите сотрудника"
 }

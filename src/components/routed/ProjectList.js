@@ -82,7 +82,7 @@ class ProjectList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                            <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/newProject"}/>
+                            <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/project/new"}/>
                     </div>
                 </div>
                 <div className="table-responsive">

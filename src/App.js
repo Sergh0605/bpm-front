@@ -39,7 +39,7 @@ class App extends React.Component {
                 <Routes>
                     <Route path="/login" element={<LoginComponent/>}/>
                     <Route path="/" element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<ProjectList editable={this.isEditable()}/>}/>}/>
-                    <Route path="/newProject" element={<UserAuthCheck roles={["EDITOR"]} comp={<ProjectPage editable={false} new={true}/>}/>}/>
+                    <Route path="/project/new" element={<UserAuthCheck roles={["EDITOR"]} comp={<ProjectPage disabled={false}/>}/>}/>
                 </Routes>
             </div>
         );

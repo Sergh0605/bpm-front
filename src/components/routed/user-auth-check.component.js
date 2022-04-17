@@ -23,6 +23,8 @@ export default class UserAuthCheck extends Component {
             });
             if (checkPassed) {
                 return (this.props.comp);
+            } else {
+                //TODO move to not enough rights page
             }
         }
 

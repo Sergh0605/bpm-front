@@ -1,7 +1,7 @@
 import axios from "axios";
 import TokenService from "./token.service";
 import AuthService from "./auth.service";
-const API_URL = "http://localhost:8090/api";
+import {API_URL} from "../properties/properties";
 
 const instance = axios.create({
     baseURL: API_URL,

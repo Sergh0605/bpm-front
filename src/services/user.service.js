@@ -1,12 +1,12 @@
-import axios from 'axios';
+import api from "./api";
 import authHeader from './auth-header';
 const API_URL = 'http://localhost:8080/api/user/';
 class UserService {
     getAll() {
-        return axios.get(API_URL, { headers: authHeader() });
+        return api.get("/user");
     }
     getUser(id) {
-        return axios.get(API_URL + id, { headers: authHeader() });
+        return api.get("/user/" + id);
     }
 }
 export default new UserService();

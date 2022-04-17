@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "./api";
 import TokenService from "./token.service";
-const API_URL = "http://localhost:8090/api/user";
+import {API_URL} from "../properties/properties";
 
 const parseJwt = (token) => {
     try {
@@ -14,7 +14,7 @@ const parseJwt = (token) => {
 class AuthService {
     login(login, password) {
         return axios
-            .post(API_URL + "/auth", {
+            .post(API_URL + "/user/auth", {
                 login,
                 password
             })

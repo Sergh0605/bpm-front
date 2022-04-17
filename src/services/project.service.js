@@ -14,5 +14,9 @@ class ProjectService {
     getPdf(id) {
         return api.get("/project/" + id + "/download", {responseType: 'blob'});
     }
+
+    getById(id) {
+        return api.get("/project/" + id);
+    }
 }
 export default new ProjectService();
