@@ -1,17 +1,9 @@
 import assembledIcon from '../images/assembled.png';
 import needToAssemble from '../images/needToAssemble.png';
 import React from 'react';
-import {Link} from "react-router-dom";
-import {FormattedMessage} from "react-intl";
-import ProjectService from "../services/project.service";
-import {wait} from "@testing-library/user-event/dist/utils";
 import IconButton from "./icon-button.component";
 
 class AssembleButton extends React.Component {
-    // eslint-disable-next-line no-useless-constructor
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         let image;

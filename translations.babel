@@ -17,6 +17,91 @@
         <name/>
         <children>
             <concept_node>
+                <name>docs-list_col-code</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>docs-list_col-editTime</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>docs-list_col-name</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>docs-list_col-type</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>docs-list_head</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
                 <name>header_companies</name>
                 <definition_loaded>false</definition_loaded>
                 <description/>
@@ -289,6 +374,23 @@
                 </translations>
             </concept_node>
             <concept_node>
+                <name>project-page_cancel-button</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
                 <name>project-page_code</name>
                 <definition_loaded>false</definition_loaded>
                 <description/>
@@ -340,6 +442,125 @@
                 </translations>
             </concept_node>
             <concept_node>
+                <name>project-page_save-button</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-code</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-company</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-name</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-release-date</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-volume-name</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project-page_validation-volume-number</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
                 <name>project_page-chief</name>
                 <definition_loaded>false</definition_loaded>
                 <description/>
@@ -358,6 +579,23 @@
             </concept_node>
             <concept_node>
                 <name>project_page-company</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project_page-company-choice</name>
                 <definition_loaded>false</definition_loaded>
                 <description/>
                 <comment/>
@@ -459,7 +697,41 @@
                 </translations>
             </concept_node>
             <concept_node>
+                <name>project_page-stage-choice</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
                 <name>project_page-supervisor</name>
+                <definition_loaded>false</definition_loaded>
+                <description/>
+                <comment/>
+                <default_text/>
+                <translations>
+                    <translation>
+                        <language>en-US</language>
+                        <approved>false</approved>
+                    </translation>
+                    <translation>
+                        <language>ru-RU</language>
+                        <approved>false</approved>
+                    </translation>
+                </translations>
+            </concept_node>
+            <concept_node>
+                <name>project_page-user-choice</name>
                 <definition_loaded>false</definition_loaded>
                 <description/>
                 <comment/>

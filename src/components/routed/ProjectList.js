@@ -6,9 +6,8 @@ import {FormattedMessage} from "react-intl";
 import ProjectService from "../../services/project.service";
 import AssembleButton from "../assemble-button.component";
 import IconButton from "../icon-button.component";
-import AuthService from "../../services/auth.service";
-import {Link} from "react-router-dom";
 import LinkButton from "../link-button.component";
+import {Navigate} from "react-router";
 
 class ProjectList extends React.Component {
     constructor(props) {
@@ -16,7 +15,8 @@ class ProjectList extends React.Component {
         this.refresh = this.refresh.bind(this);
         this.assemble = this.assemble.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
-        this.getPdf = this.getPdf.bind(this);
+        this.navigateToUrl = this.navigateToUrl.bind(this);
+        this.setUrl = this.setUrl.bind(this);
         this.state = {
             data: "",
             editable: this.props.editable
@@ -37,6 +37,18 @@ class ProjectList extends React.Component {
         );
     }
 
+    navigateToUrl() {
+        if (this.state.url) {
+            return (<Navigate to={this.state.url}/>)
+        }
+    }
+
+    setUrl(url) {
+        this.setState({
+            url: url,
+        })
+    }
+
     assemble(projectId) {
         ProjectService.assemble(projectId).then(this.refresh);
     }
@@ -45,20 +57,8 @@ class ProjectList extends React.Component {
         ProjectService.delete(projectId).then(this.refresh);
     }
 
-    getPdf(projectId) {
-        ProjectService.getPdf(projectId)
-            .then(response => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', 'project.pdf'); //TODO customize name
-                    document.body.appendChild(link);
-                    link.click();
-                }
-            );
-    }
-
     getTable() {
+        const navigateToUrl = this.navigateToUrl();
         if (this.state.data && this.state.data.content) {
             let projects = this.state.data.content
             return <div className="ps-5 pe-5">
@@ -111,7 +111,7 @@ class ProjectList extends React.Component {
                         </thead>
                         <tbody>
                         {projects.map((project) => (
-                            <tr key={project.id}>
+                            <tr key={project.id} onClick={() => this.setUrl("/project/" + project.id)}>
                                 <th scope="row">{project.code}</th>
                                 <td>{project.name}</td>
                                 <td>{project.stage.name}</td>
@@ -122,13 +122,18 @@ class ProjectList extends React.Component {
                                                     onClickHandler={this.assemble}/>
                                 </td>
                                 <td><IconButton objectId={project.id} disabled={false} icon={pdfIcon}
-                                                onClickHandler={this.getPdf}/></td>
+                                                onClickHandler={(id) => {
+                                                    ProjectService.getPdfForDownload(id)
+                                                }}/></td>
                                 <td><IconButton objectId={project.id} disabled={!this.state.editable} icon={deleteIcon}
                                                 onClickHandler={this.deleteProject}/></td>
                             </tr>
                         ))}
                         </tbody>
                     </table>
+                </div>
+                <div>
+                    {navigateToUrl}
                 </div>
             </div>
         }

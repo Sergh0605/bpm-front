@@ -1,10 +1,4 @@
-import assembledIcon from '../images/assembled.png';
-import needToAssemble from '../images/needToAssemble.png';
 import React from 'react';
-import {Link} from "react-router-dom";
-import {FormattedMessage} from "react-intl";
-import ProjectService from "../services/project.service";
-import {wait} from "@testing-library/user-event/dist/utils";
 
 class IconButton extends React.Component {
     constructor(props) {
@@ -12,7 +6,8 @@ class IconButton extends React.Component {
         this.buttonClick = this.buttonClick.bind(this);
     }
 
-    buttonClick(){
+    buttonClick(event){
+        event.stopPropagation();
         this.props.onClickHandler(this.props.objectId)
     }
 

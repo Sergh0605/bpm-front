@@ -1,152 +1,218 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
+
 .dropdown-item:hover, .dropdown-item:focus {
-  background-color: #76c5f2 !important;
+    background-color: #76c5f2 !important;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
-  color: #adb5bd !important;
-  pointer-events: none !important;
-  background-color: transparent !important;
+    color: #adb5bd !important;
+    pointer-events: none !important;
+    background-color: transparent !important;
 }
 
 .dropdown-item {
-  color: #152536 !important;
+    color: #152536 !important;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 label {
-  display: block;
-  margin-top: 10px;
+    display: block;
+    margin-top: 10px;
 }
+
 .card-container.card {
-  max-width: 350px !important;
-  padding: 30px 30px;
+    max-width: 350px !important;
+    padding: 30px 30px;
 }
+
 .card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    background-color: #f7f7f7;
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    margin-top: 50px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
+
 .profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
 }
+
+.btn {
+    display: inline-block !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    color: #212529 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    vertical-align: middle !important;
+    cursor: pointer !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    user-select: none !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 1rem !important;
+    border-radius: 0.25rem !important;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out  !important;
+}
+
 .btn-primary {
-  color: #152536 !important;
-  background-color: #76C5F2 !important;
-  border-color: #76C5F2 !important;
+    color: #152536 !important;
+    background-color: #76C5F2 !important;
+    border-color: #76C5F2 !important;
 }
 
 .btn-primary:hover {
-  color: #152536 !important;
-  background-color: #00A6F6FF !important;
-  border-color: #00A6F6FF !important;
+    color: #152536 !important;
+    background-color: #00A6F6FF !important;
+    border-color: #00A6F6FF !important;
 }
 
 .btn.disabled {
-  opacity: 1 !important;
+    opacity: 1 !important;
+}
+
+.btn-outline-primary {
+    color: #152536 !important;
+    border-color: #76C5F2 !important;
+}
+
+.btn-outline-primary:hover {
+    color: #152536 !important;
+    background-color: #00A6F6FF !important;
+    border-color: #00A6F6FF !important;
 }
 
 .form-control {
-  color: #152536 !important;
+    color: #152536 !important;
 }
 
 .default-color {
-  color: #152536 !important;
+    color: #152536 !important;
 }
 
 .btn-outline-info {
-  color: rgba(13, 202, 240, 0) !important;
-  border-color: rgb(221, 225, 229) !important;
+    color: rgba(13, 202, 240, 0) !important;
+    border-color: rgb(221, 225, 229) !important;
 }
 
 .btn-outline-info.disabled {
-  color: rgba(13, 202, 240, 0) !important;
-  border-color: rgba(221, 225, 229, 0) !important;
+    color: rgba(13, 202, 240, 0) !important;
+    border-color: rgba(221, 225, 229, 0) !important;
 }
 
 .btn-outline-info:hover {
-  color: #000;
-  background-color: rgb(221, 225, 229) !important;
-  border-color: rgb(0, 0, 0) !important;
+    color: #000;
+    background-color: rgb(221, 225, 229) !important;
+    border-color: rgb(0, 0, 0) !important;
 }
 
 .table {
-  --bs-table-hover-bg: rgba(118, 197, 242, 0.32) !important;
+    --bs-table-hover-bg: rgba(118, 197, 242, 0.32) !important;
 }
 
 .code-col {
-  width: 10%;
+    width: 10%;
+}
+
+.full-code-col {
+    width: 15%;
 }
 
 .name-col {
-  width: 50%;
+    width: 50%;
 }
 
 .stage-col {
-  width: 10%;
+    width: 10%;
 }
 
 .company-col {
-  width: 10%;
+    width: 10%;
 }
 
 .time-col {
-  width: 10%;
+    width: 10%;
 }
 
 .button-col {
-  width: 45px;
+    width: 45px;
 }
 
 .half {
-  width: 50%;
+    width: 50%;
+}
+
+.alert {
+    position: relative !important;
+    padding: 0 0 0 20px !important;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    align-items: center !important;
+    display: flex !important;
+}
+
+.custom-button {
+    width: 200px;
+}
+
+.pdf-viewer {
+    border-color: black;
+    border-width: 2px;
+    height: 55%;
+    max-width: 75%;
+    background: #7d7d81;
+
+}
+
+.project-row {
+    height: 700px;
 }
