@@ -43,6 +43,7 @@ class AuthService {
             const decodedAccessJwt = parseJwt(accessToken);
             const decodedRefreshJwt = parseJwt(refreshToken);
             return {
+                id: decodedAccessJwt.userId,
                 login: decodedAccessJwt.sub,
                 roles: decodedAccessJwt.UserRoles,
                 accessExpDate: decodedAccessJwt.exp,

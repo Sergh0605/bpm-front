@@ -86,6 +86,12 @@ class ProjectForm extends React.Component {
         )
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.project !== prevProps.project) {
+            this.refresh();
+        }
+    }
+
     onCompanyChange(e) {
         this.setState({
             loading: true
@@ -122,7 +128,6 @@ class ProjectForm extends React.Component {
     onCancelHandler(e) {
         e.preventDefault();
         this.props.cancelButtonClick();
-        this.refresh();
     }
 
     onSaveHandler(e) {
@@ -364,8 +369,7 @@ class ProjectForm extends React.Component {
                                 <button
                                     className="btn btn-primary fw-bold fs-5 custom-button me-2"
                                     disabled={this.props.loading}
-                                    hidden={this.props.disabled}
-                                >
+                                    hidden={this.props.disabled}>
                                     {this.props.loading && (
                                         <span className="spinner-border spinner-border-sm"></span>
                                     )}

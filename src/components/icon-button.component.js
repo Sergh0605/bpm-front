@@ -6,7 +6,7 @@ class IconButton extends React.Component {
         this.buttonClick = this.buttonClick.bind(this);
     }
 
-    buttonClick(event){
+    buttonClick(event) {
         event.stopPropagation();
         this.props.onClickHandler(this.props.objectId)
     }
@@ -19,10 +19,13 @@ class IconButton extends React.Component {
             disabled = "";
         }
         return (
-            <button type="button" className={"btn btn-outline-info " + disabled} onClick={this.buttonClick}>
-                <img src={this.props.icon} alt="" width="40" height="40" />
+            <button type="button"
+                    className={"btn btn-outline-info " + disabled}
+                    onClick={this.buttonClick}>
+                <img src={this.props.icon} alt="" width="40" height="40"/>
             </button>
         )
+
     }
 }
 

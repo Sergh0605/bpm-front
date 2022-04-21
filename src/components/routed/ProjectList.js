@@ -8,6 +8,9 @@ import AssembleButton from "../assemble-button.component";
 import IconButton from "../icon-button.component";
 import LinkButton from "../link-button.component";
 import {Navigate} from "react-router";
+import DeleteModal from "../modal";
+import CustomPaginator from "../custom-pagination.component";
+
 
 class ProjectList extends React.Component {
     constructor(props) {
@@ -17,13 +20,20 @@ class ProjectList extends React.Component {
         this.deleteProject = this.deleteProject.bind(this);
         this.navigateToUrl = this.navigateToUrl.bind(this);
         this.setUrl = this.setUrl.bind(this);
+        this.handleShowModal = this.handleShowModal.bind(this);
+        this.handleHideModal = this.handleHideModal.bind(this);
+        this.getPage = this.getPage.bind(this);
         this.state = {
             data: "",
-            editable: this.props.editable
+            editable: this.props.editable,
+            showModal: false,
         };
     }
 
     componentDidMount() {
+        this.setState({
+            showModal: false,
+        })
         this.refresh();
     }
 
@@ -31,7 +41,19 @@ class ProjectList extends React.Component {
         ProjectService.getAll().then(
             response => {
                 this.setState({
-                    data: response.data
+                    data: response.data,
+                    showModal: false
+                });
+            }
+        );
+    }
+
+    getPage(pageNumber) {
+        ProjectService.getPage(pageNumber).then(
+            response => {
+                this.setState({
+                    data: response.data,
+                    showModal: false
                 });
             }
         );
@@ -57,12 +79,23 @@ class ProjectList extends React.Component {
         ProjectService.delete(projectId).then(this.refresh);
     }
 
+    handleHideModal() {
+        this.setState({showModal: false})
+    }
+
+    handleShowModal(projectId) {
+        this.setState({
+            showModal: true,
+            projectForDelete: projectId,
+        })
+    }
+
     getTable() {
         const navigateToUrl = this.navigateToUrl();
         if (this.state.data && this.state.data.content) {
             let projects = this.state.data.content
             return <div className="ps-5 pe-5">
-
+                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject} projectId={this.state.projectForDelete}/> : null}
                 <div className="row justify-content-between pt-3">
                     <div className="col-2">
                         <h4>
@@ -82,7 +115,7 @@ class ProjectList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                            <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/project/new"}/>
+                        <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/project/new"}/>
                     </div>
                 </div>
                 <div className="table-responsive">
@@ -124,9 +157,13 @@ class ProjectList extends React.Component {
                                 <td><IconButton objectId={project.id} disabled={false} icon={pdfIcon}
                                                 onClickHandler={(id) => {
                                                     ProjectService.getPdfForDownload(id)
-                                                }}/></td>
-                                <td><IconButton objectId={project.id} disabled={!this.state.editable} icon={deleteIcon}
-                                                onClickHandler={this.deleteProject}/></td>
+                                                }}/>
+                                </td>
+                                <td><IconButton objectId={project.id}
+                                                disabled={!this.state.editable}
+                                                icon={deleteIcon}
+                                                onClickHandler={this.handleShowModal}/>
+                                </td>
                             </tr>
                         ))}
                         </tbody>
@@ -135,6 +172,9 @@ class ProjectList extends React.Component {
                 <div>
                     {navigateToUrl}
                 </div>
+                    <div className="d-flex justify-content-center">
+                        {this.state.data.totalPages > 1 ? <CustomPaginator active={this.state.data.number} pageCount={this.state.data.totalPages} onSetPage={this.getPage}/> : null}
+                    </div>
             </div>
         }
     }

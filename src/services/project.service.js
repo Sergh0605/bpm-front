@@ -3,6 +3,11 @@ class ProjectService {
     getAll() {
         return api.get("/project");
     }
+
+    getPage(pageNumber) {
+        return api.get("/project?page=" + pageNumber + "&size=5")
+    }
+
     assemble(id) {
         return api.post("/project/" + id + "/assemble", {});
     }

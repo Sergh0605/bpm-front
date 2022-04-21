@@ -45,7 +45,7 @@ class Header extends React.Component {
                             aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className={"collapse navbar-collapse end-0 me-4" + this.getVisible()}
+                    <div className={"collapse navbar-collapse end-0 me-4 justify-content-end" + this.getVisible()}
                          id="navbarNavDropdown">
                         <ul className="navbar-nav">
                             <li className="nav-item dropdown">

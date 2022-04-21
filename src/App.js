@@ -1,6 +1,8 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/js/src/dropdown.js';
+import 'bootstrap/js/src/carousel.js';
+import 'bootstrap/js/src/modal.js';
 import Header from "./components/Header";
 import React from "react";
 import {Route} from "react-router-dom";

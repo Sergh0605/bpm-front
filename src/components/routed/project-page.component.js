@@ -6,6 +6,8 @@ import DocumentList from "../documents-list.component";
 import ButtonsPanel from "../button-panel.component";
 import {Navigate} from "react-router";
 import PdfPreview from "../pdf-preview.component";
+import DeleteModal from "../modal";
+import CommentSidebar from "../comment-sideBar.component";
 
 function blobToBase64(blob) {
     return new Promise((resolve, _) => {
@@ -18,8 +20,6 @@ function blobToBase64(blob) {
 class ProjectPage extends React.Component {
     constructor(props) {
         super(props);
-        this.getPdfPreview = this.getPdfPreview.bind(this);
-        this.getPdfUrl = this.getPdfUrl.bind(this);
         this.assemble = this.assemble.bind(this);
         this.newDoc = this.newDoc.bind(this);
         this.download = this.download.bind(this);
@@ -32,6 +32,10 @@ class ProjectPage extends React.Component {
         this.refresh = this.refresh.bind(this);
         this.cancel = this.cancel.bind(this);
         this.save = this.save.bind(this);
+        this.handleHideModal = this.handleHideModal.bind(this);
+        this.handleShowModal = this.handleShowModal.bind(this);
+        this.handleShowComments = this.handleShowComments.bind(this);
+        this.handleHideComments = this.handleHideComments.bind(this);
         let user = AuthService.getCurrentUser();
         let editable = false;
         if (user) {
@@ -85,46 +89,8 @@ class ProjectPage extends React.Component {
                 this.setState({
                     project: response.data
                 });
-                this.getPdfUrl();
             }
         );
-    }
-
-    getPdfUrl() {
-        ProjectService.getPdf(this.state.c_projectId).then(
-            response => {
-                console.log(response.data)
-                let blob = new Blob([response.data], {type: 'application/pdf'});
-                const url = URL.createObjectURL(blob);
-                blobToBase64(blob).then(
-                    result => {
-                        this.setState({
-                            pdfDataUrl: result,
-                        })
-                    }
-                )
-                this.setState({
-                    pdfUrl: url,
-                })
-            }
-        )
-    }
-
-    getPdfPreview() {
-        if (this.state.pdfDataUrl) {
-            return <div className="mt-5 align-items-center" align="center">
-                {/*                <PDFViewer
-                    document={{
-                        url: this.state.pdfDataUrl,
-                    }}
-                    scale={0.7}
-                    navbarOnTop={true}
-                    hideRotation={true}
-                    hideZoom={true}
-                    canvasCss={"pdf-viewer"}
-                />*/}
-            </div>
-        }
     }
 
     assemble(id) {
@@ -233,6 +199,25 @@ class ProjectPage extends React.Component {
         }
     }
 
+    handleHideModal() {
+        this.setState({showModal: false})
+    }
+
+    handleShowModal(projectId) {
+        this.setState({
+            showModal: true,
+            projectForDelete: projectId,
+        })
+    }
+
+    handleShowComments() {
+        this.setState({showComments: true})
+    }
+
+    handleHideComments() {
+        this.setState({showComments: false})
+    }
+
 
     render() {
         const navigateToUrl = this.navigateToUrl();
@@ -240,8 +225,21 @@ class ProjectPage extends React.Component {
             <div>
                 {navigateToUrl}
             </div>
+            <div>
+                {this.state.showModal ?
+                    <DeleteModal show={this.state.showModal}
+                                 onHide={this.handleHideModal}
+                                 onAgree={this.delete}
+                                 projectId={this.state.projectForDelete}/> : null}
+            </div>
+            <div>
+                {this.state.showComments && this.state.c_projectId ?
+                    <CommentSidebar show={this.state.showComments}
+                                    onHide={this.handleHideComments}
+                                    projectId={this.state.c_projectId}/> : null}
+            </div>
             <h1>{this.state.project.name}</h1>
-            <div className="row g-3">
+            <div className="row g-3 custom-height">
                 <div className="col-md-6">
                     <ButtonsPanel
                         hidden={!this.state.c_projectId}
@@ -252,8 +250,8 @@ class ProjectPage extends React.Component {
                         downloadButtonClick={this.download}
                         historyButtonClick={this.history}
                         editButtonClick={this.edit}
-                        commentButtonClick={this.comment}
-                        deleteButtonClick={this.delete}
+                        commentButtonClick={this.handleShowComments}
+                        deleteButtonClick={this.handleShowModal}
                     />
                     <ProjectForm disabled={this.state.disabled}
                                  project={this.state.project}
@@ -265,12 +263,14 @@ class ProjectPage extends React.Component {
                     />
                 </div>
                 <div className="col-md-6">
-                    <PdfPreview projectId={this.state.c_projectId}/>
+                    {this.state.c_projectId ?
+                        <PdfPreview projectId={this.state.c_projectId} project={this.state.project}/> : null}
                 </div>
             </div>
             <DocumentList projectId={this.state.c_projectId}
                           editable={this.state.editable}
                           refreshProject={this.refresh}
+                          project={this.state.project}
             />
         </div>
     }

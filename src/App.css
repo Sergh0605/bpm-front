@@ -216,3 +216,45 @@ label {
 .project-row {
     height: 700px;
 }
+
+.custom-width {
+    width: 45% !important;
+}
+
+.custom-height {
+    height: 45% !important;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #76C5F2 !important;
+    border-color: #76C5F2 !important;
+    font-weight: bold;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #152536 !important;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.comment-header {
+    border: 1px solid;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-color: #76c5f2;
+    background: #76c5f2;
+}
+
+.comment-message {
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    border-color: #76c5f2;
+    background: #ffffff;
+}
