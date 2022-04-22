@@ -1,5 +1,6 @@
 import React from "react";
 import ProjectService from "../services/project.service";
+import DocumentService from "../services/document.service";
 
 const PDFJS = require("pdfjs-dist/webpack");
 
@@ -31,6 +32,7 @@ function blobToBase64(blob) {
 class PdfPreview extends React.Component {
     constructor(props) {
         super(props);
+        this.refresh = this.refresh.bind(this);
         this.state = {
             pdfDataUrl: "",
             pdfUrl: "",
@@ -44,7 +46,7 @@ class PdfPreview extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.project !== prevProps.project) {
+        if (this.props.object !== prevProps.object) {
             this.refresh();
         }
     }
@@ -53,22 +55,43 @@ class PdfPreview extends React.Component {
         this.setState({
             loading: true,
         })
-        ProjectService.getPdf(this.props.projectId).then(
-            response => {
-                const blob = new Blob([response.data], {type: 'application/pdf'});
-                blobToBase64(blob).then(
-                    result => {
-                        convertPdfToImages(result).then(
-                            images => {
-                                this.setState({
-                                    imgArray: images,
-                                    loading: false,
-                                })
-                            }
-                        )
-                    })
+        if (this.props.object.project) {
+            if (this.props.objectId) {
+                DocumentService.getPdf(this.props.object.project.id ,this.props.objectId).then(
+                    response => {
+                        const blob = new Blob([response.data], {type: 'application/pdf'});
+                        blobToBase64(blob).then(
+                            result => {
+                                convertPdfToImages(result).then(
+                                    images => {
+                                        this.setState({
+                                            imgArray: images,
+                                            loading: false,
+                                        })
+                                    }
+                                )
+                            })
+                    }
+                )
             }
-        )
+        } else {
+            ProjectService.getPdf(this.props.objectId).then(
+                response => {
+                    const blob = new Blob([response.data], {type: 'application/pdf'});
+                    blobToBase64(blob).then(
+                        result => {
+                            convertPdfToImages(result).then(
+                                images => {
+                                    this.setState({
+                                        imgArray: images,
+                                        loading: false,
+                                    })
+                                }
+                            )
+                        })
+                }
+            )
+        }
     }
 
 

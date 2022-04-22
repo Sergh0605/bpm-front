@@ -1,11 +1,6 @@
 import React from 'react';
-import {Button, Modal, Offcanvas} from "react-bootstrap";
-import {FormattedMessage} from "react-intl";
 
 class Comment extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

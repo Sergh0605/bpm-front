@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Modal, Offcanvas} from "react-bootstrap";
+import {Offcanvas} from "react-bootstrap";
 import {FormattedMessage} from "react-intl";
 import CommentService from "../services/comment.service";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -26,7 +26,7 @@ class CommentSidebar extends React.Component {
     refresh() {
         if (this.props.projectId) {
             if (this.props.documentId) {
-                CommentService.getByDocumentId(this.props.projectId, this.props.documentId).then(
+                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, 0, 10).then(
                     response => {
                         this.setState({
                             comments: response.data.content,
@@ -36,7 +36,7 @@ class CommentSidebar extends React.Component {
                     }
                 )
             } else {
-                CommentService.getByProjectId(this.props.projectId).then(
+                CommentService.getByProjectIdPage(this.props.projectId, 0, 10).then(
                     response => {
                         this.setState({
                             comments: response.data.content,
@@ -51,7 +51,7 @@ class CommentSidebar extends React.Component {
     getNextPage() {
         if (this.props.projectId) {
             if (this.props.documentId) {
-                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, this.state.currentPage + 1).then(
+                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, this.state.currentPage + 1, 5).then(
                     response => {
                         this.setState({
                             comments: this.state.comments.concat(response.data.content),
@@ -61,7 +61,7 @@ class CommentSidebar extends React.Component {
                     }
                 )
             } else {
-                CommentService.getByProjectIdPage(this.props.projectId, this.state.currentPage + 1).then(
+                CommentService.getByProjectIdPage(this.props.projectId, this.state.currentPage + 1, 5).then(
                     response => {
                         this.setState({
                             comments: this.state.comments.concat(response.data.content),
@@ -108,7 +108,7 @@ class CommentSidebar extends React.Component {
                             hasMore={!this.state.isLastPage}
                             loader={<div>Загрузка...</div>}
                             dataLength={this.state.comments.length}
-                            height={300}
+                            height={600}
                         >
                             {this.state.comments.map((comment, index) => (
                                 <div key={index}>

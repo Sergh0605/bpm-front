@@ -4,16 +4,16 @@ class CommentService {
         return api.get("/project/" + projectId + "/comment")
     }
 
-    getByProjectIdPage(projectId, number) {
-        return api.get("/project/" + projectId + "/comment?page=" + number + "&size=5")
+    getByProjectIdPage(projectId, number, size) {
+        return api.get("/project/" + projectId + "/comment?page=" + number + "&size=" + size)
     }
 
     getByDocumentId(projectId, documentId) {
         return api.get("/project/" + projectId + "/document/" + documentId + "/comment")
     }
 
-    getByDocumentIdPage(projectId, documentId, number) {
-        return api.get("/project/" + projectId + "/document/" + documentId + "/comment?page=" + number + "&size=5")
+    getByDocumentIdPage(projectId, documentId, number, size) {
+        return api.get("/project/" + projectId + "/document/" + documentId + "/comment?page=" + number + "&size=" + size)
     }
 
     addCommentForProject(projectId, comment) {

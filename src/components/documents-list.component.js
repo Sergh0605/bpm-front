@@ -24,7 +24,9 @@ class DocumentList extends React.Component {
     }
 
     componentDidMount() {
-        this.refresh();
+        if (this.state.projectId) {
+            this.refresh();
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -55,16 +57,12 @@ class DocumentList extends React.Component {
     }
 
     assemble(documentId) {
-        DocumentService.assemble(this.state.projectId, documentId).then(this.refresh());
+        DocumentService.assemble(this.state.projectId, documentId).then(
+            () => this.refresh());
     }
 
     delete(documentId) {
-        DocumentService.delete(this.state.projectId, documentId).then(
-            res => {
-                this.refresh();
-                this.props.refreshProject();
-            }
-        );
+        this.props.onDelete(documentId);
     }
 
     getTable() {
@@ -72,35 +70,6 @@ class DocumentList extends React.Component {
         if (this.state.data) {
             let docs = this.state.data
             return <div>
-                <div className="modal fade"
-                     tabIndex="-1"
-                     id="mainModal"
-                     aria-labelledby="exampleModalLabel"
-                     aria-hidden="true"
-                >
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Удалить проект</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Закрыть"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>
-                                    <FormattedMessage id="project-delete-modal_message"/>
-                                </p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" >
-                                    <FormattedMessage id="project-delete-modal_yes"/>
-                                </button>
-                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal">
-                                    <FormattedMessage id="project-delete-modal_no"/>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <h1>
                     <FormattedMessage id="docs-list_head"/>
                 </h1>

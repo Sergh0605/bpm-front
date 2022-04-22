@@ -9,7 +9,7 @@ class DeleteModal extends React.Component {
     }
 
     delete() {
-        this.props.onAgree(this.props.projectId);
+        this.props.onAgree(this.props.objectId);
     }
 
     render() {

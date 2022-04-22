@@ -1,7 +1,5 @@
 import React from 'react';
-import {Button, Form, Modal, Offcanvas} from "react-bootstrap";
-import {FormattedMessage} from "react-intl";
-import AuthService from "../services/auth.service";
+import {Button, Form} from "react-bootstrap";
 
 class NewCommentForm extends React.Component {
     constructor(props) {

@@ -258,3 +258,38 @@ label {
     border-color: #76c5f2;
     background: #ffffff;
 }
+
+a:link {
+    color: #76c5f2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* visited link */
+a:visited {
+    color: #76c5f2 ;
+    font-weight: bold !important;
+    text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+    color: #00A6F6FF !important;
+    font-weight: bold;
+}
+
+/* selected link */
+a:active {
+    color: #76c5f2 !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    float: left;
+    padding-right: 0.5rem;
+    color: #6c757d;
+    font-weight: bold;
+}
+.breadcrumb-item.active {
+    color: #6c757d;
+    font-weight: bold;
+}

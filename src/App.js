@@ -12,6 +12,7 @@ import {Routes, useParams} from "react-router";
 import AuthService from "./services/auth.service";
 import UserAuthCheck from "./components/routed/user-auth-check.component";
 import ProjectPage from "./components/routed/project-page.component";
+import DocumentPage from "./components/routed/document-page.component";
 
 class App extends React.Component {
     constructor(props) {
@@ -39,14 +40,28 @@ class App extends React.Component {
             const params = useParams();
             return <ProjectPage disabled={true} {...{...props, match: {params}} } />
         }
+
+        const DocumentWrapper = (props) => {
+            const params = useParams();
+            return <DocumentPage disabled={props.disabledForm} {...{...props, match: {params}} } />
+        }
+
         return (
             <div>
                 <Header userData={this.state}/>
                 <Routes>
-                    <Route path="/login" element={<LoginComponent/>}/>
-                    <Route path="/" element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<ProjectList editable={this.isEditable()}/>}/>}/>
-                    <Route path="/project/new" element={<UserAuthCheck roles={["EDITOR"]} comp={<ProjectPage disabled={false}/>}/>}/>
-                    <Route path="/project/:projectId" element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<ProjectWrapper/>}/>}/>
+                    <Route path="/login"
+                           element={<LoginComponent/>}/>
+                    <Route path="/"
+                           element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<ProjectList editable={this.isEditable()}/>}/>}/>
+                    <Route path="/project/new"
+                           element={<UserAuthCheck roles={["EDITOR"]} comp={<ProjectPage disabled={false}/>}/>}/>
+                    <Route path="/project/:projectId"
+                           element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<ProjectWrapper/>}/>}/>
+                    <Route path="/project/:projectId/document/new"
+                           element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<DocumentWrapper disabledForm={false}/>}/>}/>
+                    <Route path="/project/:projectId/document/:documentId"
+                           element={<UserAuthCheck roles={["EDITOR", "ADMIN", "VIEWER"]} comp={<DocumentWrapper disabledForm={true}/>}/>}/>
                 </Routes>
             </div>
         );
