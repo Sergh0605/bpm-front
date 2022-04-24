@@ -46,51 +46,27 @@ class PdfPreview extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.object !== prevProps.object) {
+        if (this.props !== prevProps) {
             this.refresh();
         }
     }
 
     refresh() {
-        this.setState({
-            loading: true,
-        })
-        if (this.props.object.project) {
-            if (this.props.objectId) {
-                DocumentService.getPdf(this.props.object.project.id ,this.props.objectId).then(
-                    response => {
-                        const blob = new Blob([response.data], {type: 'application/pdf'});
-                        blobToBase64(blob).then(
-                            result => {
-                                convertPdfToImages(result).then(
-                                    images => {
-                                        this.setState({
-                                            imgArray: images,
-                                            loading: false,
-                                        })
-                                    }
-                                )
+        if (this.props.pdfFile) {
+            this.setState({
+                loading: true,
+            })
+            const blob = new Blob([this.props.pdfFile], {type: 'application/pdf'});
+            blobToBase64(blob).then(
+                result => {
+                    convertPdfToImages(result).then(
+                        images => {
+                            this.setState({
+                                imgArray: images,
+                                loading: false,
                             })
-                    }
-                )
-            }
-        } else {
-            ProjectService.getPdf(this.props.objectId).then(
-                response => {
-                    const blob = new Blob([response.data], {type: 'application/pdf'});
-                    blobToBase64(blob).then(
-                        result => {
-                            convertPdfToImages(result).then(
-                                images => {
-                                    this.setState({
-                                        imgArray: images,
-                                        loading: false,
-                                    })
-                                }
-                            )
                         })
-                }
-            )
+                })
         }
     }
 
@@ -105,7 +81,7 @@ class PdfPreview extends React.Component {
                         data-bs-ride="carousel"
                         data-bs-interval="false">
                         {this.state.loading && (
-                            <span className="spinner-border spinner-border-sm"></span>
+                            <span className="spinner-border spinner-border-sm"/>
                         )}
                         <div className="carousel-indicators" hidden={true}>
                             {this.state.imgArray.map((image, index) => {
@@ -118,7 +94,7 @@ class PdfPreview extends React.Component {
                                         className="active"
                                         aria-current="true"
                                         aria-label={`Slide ${index + 1}`}
-                                    ></button>
+                                    />
                                 );
                             })}
                         </div>
@@ -131,21 +107,19 @@ class PdfPreview extends React.Component {
                         </div>
                         <button className="carousel-control-prev" type="button"
                                 data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span className="carousel-control-prev-icon" aria-hidden="true"/>
                             <span className="visually-hidden">Previous</span>
                         </button>
                         <button className="carousel-control-next" type="button"
                                 data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span className="carousel-control-next-icon" aria-hidden="true"/>
                             <span className="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
             )
         } else {
-            return (
-                <div></div>
-            )
+            return (<div/>)
         }
     }
 }

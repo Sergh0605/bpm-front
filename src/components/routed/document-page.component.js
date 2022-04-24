@@ -87,10 +87,15 @@ class DocumentPage extends React.Component {
 
     refresh() {
         DocumentService.getById(this.state.c_projectId, this.state.c_documentId).then(
-            response => {
-                this.setState({
-                    document: response.data
-                });
+            docResponse => {
+                DocumentService.getPdf(this.state.c_projectId, this.state.c_documentId).then(
+                    pdfResponse => {
+                        this.setState({
+                            document: docResponse.data,
+                            pdfFile: pdfResponse.data
+                        });
+                    }
+                )
             }
         );
     }
@@ -264,8 +269,7 @@ class DocumentPage extends React.Component {
                 </div>
                 <div className="col-md-6">
                     {this.state.c_documentId ?
-                        <PdfPreview objectId={this.state.c_documentId}
-                                    object={this.state.document}/> : null}
+                        <PdfPreview pdfFile={this.state.pdfFile}/> : null}
                 </div>
             </div>
         </div>

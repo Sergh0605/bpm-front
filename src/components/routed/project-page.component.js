@@ -90,17 +90,19 @@ class ProjectPage extends React.Component {
                                 prjResponse => {
                                     CompanyService.getUsersById(prjResponse.data.company.id).then(
                                         compUsrResponse => {
-                                            this.setState({
-                                                users: compUsrResponse.data,
-                                                project: prjResponse.data,
-                                                companies: companyResponse.data,
-                                                stages: stjResponse.data,
-                                                loading: false,
-                                            })
-                                        }
-                                    )
-                                }
-                            );
+                                            ProjectService.getPdf(this.state.c_projectId).then(
+                                                pdfResponse => {
+                                                    this.setState({
+                                                        users: compUsrResponse.data,
+                                                        project: prjResponse.data,
+                                                        companies: companyResponse.data,
+                                                        stages: stjResponse.data,
+                                                        loading: false,
+                                                        pdfFile: pdfResponse.data,
+                                                    })
+                                                })
+                                        })
+                                })
                         } else {
                             this.setState({
                                     companies: companyResponse.data,
@@ -308,7 +310,7 @@ class ProjectPage extends React.Component {
                 </div>
                 <div className="col-md-6">
                     {this.state.c_projectId ?
-                        <PdfPreview objectId={this.state.c_projectId} object={this.state.project}/> : null}
+                        <PdfPreview pdfFile={this.state.pdfFile}/> : null}
                 </div>
             </div>
             <DocumentList projectId={this.state.c_projectId}
