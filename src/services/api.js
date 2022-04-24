@@ -29,32 +29,40 @@ instance.interceptors.response.use(
         const originalConfig = err.config;
         if (originalConfig.url !== "/user/auth" && err.response) {
             // Access Token was expired
+            console.log("token expired " + originalConfig.url)
             if (err.response.status === 401 && !originalConfig._retry) {
                 originalConfig._retry = true;
                 try {
                     let currentUser = AuthService.getCurrentUser();
                     if (currentUser.refreshExpDate && currentUser.refreshExpDate * 1000 > Date.now()) {
-                        axios.post(API_URL + "/user/refresh_token_auth", {
+                        return  axios.post(API_URL + "/user/refresh_token_auth", {
                             token: TokenService.getLocalRefreshToken(),
                         }).then(response => {
+                            console.log("tokens refreshed " + originalConfig.url)
                             const tokens = response.data;
                             TokenService.setTokens(tokens);
+                            originalConfig.headers["Authorization"] = 'Bearer ' + tokens.accessToken;
                             return instance(originalConfig);
                         }, error => {
+                            console.log("tokens refresh error " + originalConfig.url)
                             TokenService.removeTokens();
                             window.location.assign("/login");
                         });
+                    } else {
+                        // Refresh Token was expired or disabled
+                        console.log("refresh token expired " + originalConfig.url)
+                        TokenService.removeTokens();
+                        window.location.assign("/login");
                     }
-                    // Refresh Token was expired or disabled
-                    TokenService.removeTokens();
-                    window.location.assign("/login");
-
                 } catch (_error) {
                     return Promise.reject(_error);
                 }
+            } else {
+                return Promise.reject(err);
             }
+        } else {
+            return Promise.reject(err);
         }
-        return Promise.reject(err);
     }
 );
 export default instance;

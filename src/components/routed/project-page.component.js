@@ -10,6 +10,8 @@ import DeleteModal from "../modal";
 import CommentSidebar from "../comment-sideBar.component";
 import BreadcrumbsCustom from "../breadcrumbs.component";
 import DocumentService from "../../services/document.service";
+import StageService from "../../services/stage.service";
+import CompanyService from "../../services/company.service";
 
 class ProjectPage extends React.Component {
     constructor(props) {
@@ -72,19 +74,45 @@ class ProjectPage extends React.Component {
     }
 
     componentDidMount() {
-        if (this.state.c_projectId) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     refresh() {
-        ProjectService.getById(this.state.c_projectId).then(
-            response => {
-                this.setState({
-                    project: response.data
-                });
+        this.setState({
+            loading: true,
+        })
+        StageService.getAll().then(
+            stjResponse => {
+                CompanyService.getAll().then(
+                    companyResponse => {
+                        if (this.state.c_projectId) {
+                            ProjectService.getById(this.state.c_projectId).then(
+                                prjResponse => {
+                                    CompanyService.getUsersById(prjResponse.data.company.id).then(
+                                        compUsrResponse => {
+                                            this.setState({
+                                                users: compUsrResponse.data,
+                                                project: prjResponse.data,
+                                                companies: companyResponse.data,
+                                                stages: stjResponse.data,
+                                                loading: false,
+                                            })
+                                        }
+                                    )
+                                }
+                            );
+                        } else {
+                            this.setState({
+                                    companies: companyResponse.data,
+                                    stages: stjResponse.data,
+                                    loading: false,
+                                }
+                            )
+                        }
+                    }
+                )
             }
-        );
+        )
     }
 
     assemble(id) {
@@ -114,6 +142,7 @@ class ProjectPage extends React.Component {
             DocumentService.delete(this.state.c_projectId, this.state.documentIdForDelete).then(() => {
                 this.setState({
                     documentIdForDelete: "",
+                    showModal: false,
                 });
                 this.refresh();
             })
@@ -129,6 +158,7 @@ class ProjectPage extends React.Component {
             this.refresh();
             this.setState({
                 disabled: true,
+                message: "",
             })
         } else {
             this.setUrl("/")
@@ -271,6 +301,9 @@ class ProjectPage extends React.Component {
                                  saveButtonClick={this.save}
                                  loading={this.state.loading}
                                  message={this.state.message}
+                                 companies={this.state.companies}
+                                 users={this.state.users}
+                                 stages={this.state.stages}
                     />
                 </div>
                 <div className="col-md-6">

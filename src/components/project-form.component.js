@@ -50,44 +50,16 @@ class ProjectForm extends React.Component {
                 controller: {id: -1},
                 chief: {id: -1},
                 version: 1,
-            }
-
+            },
         };
     }
 
     componentDidMount() {
-        StageService.getAll().then(
-            stjResponse => {
-                CompanyService.getAll().then(
-                    companyResponse => {
-                        if (this.props.project) {
-                            CompanyService.getUsersById(this.props.project.company.id).then(
-                                compResponse => {
-                                    this.setState({
-                                        users: compResponse.data,
-                                        project: this.props.project,
-                                        companies: companyResponse.data,
-                                        stages: stjResponse.data,
-                                        loading: false,
-                                    })
-                                }
-                            )
-                        } else {
-                            this.setState({
-                                    companies: companyResponse.data,
-                                    stages: stjResponse.data,
-                                    loading: false,
-                                }
-                            )
-                        }
-                    }
-                )
-            }
-        )
+        this.refresh();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.project !== prevProps.project) {
+        if (this.props !== prevProps) {
             this.refresh();
         }
     }
@@ -107,6 +79,7 @@ class ProjectForm extends React.Component {
                         }
                     },
                     loading: false,
+                    showCompanyErrorMessage: false,
                 })
             });
     }
@@ -117,34 +90,99 @@ class ProjectForm extends React.Component {
         this.setState({fields})
     }
 
-    onSelectChangeHandle(field, e) {
+    onSelectChangeHandle(field, showField, e) {
         let fields = this.state.project;
         fields[field] = {
             id: e.target.value
         };
-        this.setState({fields})
+        this.setState({fields});
+        let allFields = this.state;
+        allFields[showField] = false;
+        this.setState({allFields});
     }
 
     onCancelHandler(e) {
         e.preventDefault();
+        this.setState({
+            showCompanyErrorMessage: false,
+            showStageErrorMessage: false,
+            showDesignerErrorMessage: false,
+            showControllerErrorMessage: false,
+            showSupervisorErrorMessage: false,
+            showChiefErrorMessage: false,
+            showCodeDuplicationErrorMessage: false,
+        })
         this.props.cancelButtonClick();
     }
 
     onSaveHandler(e) {
         e.preventDefault();
         this.form.validateAll();
-        if (this.checkBtn.context._errors.length === 0) {
+        if (this.state.project.company.id < 0) {
+            this.setState({
+                showCompanyErrorMessage: true,
+            })
+        }
+        if (this.state.project.stage.id < 0) {
+            this.setState({
+                showStageErrorMessage: true,
+            })
+        }
+        if (this.state.project.designer.id < 0) {
+            this.setState({
+                showDesignerErrorMessage: true,
+            })
+        }
+        if (this.state.project.controller.id < 0) {
+            this.setState({
+                showControllerErrorMessage: true,
+            })
+        }
+        if (this.state.project.supervisor.id < 0) {
+            this.setState({
+                showSupervisorErrorMessage: true,
+            })
+        }
+        if (this.state.project.chief.id < 0) {
+            this.setState({
+                showChiefErrorMessage: true,
+            })
+        }
+        if (this.checkBtn.context._errors.length === 0 &&
+            this.state.project.chief.id > 0 &&
+            this.state.project.supervisor.id > 0 &&
+            this.state.project.controller.id > 0 &&
+            this.state.project.designer.id > 0 &&
+            this.state.project.stage.id > 0 &&
+            this.state.project.company.id > 0) {
             this.props.saveButtonClick(this.state.project);
         }
     }
 
     refresh() {
-        this.setState({
-            project: this.props.project,
-        })
+        if (this.props.message === "Can't edit project. Project with code = New code is already exists") {
+            this.setState({
+                showCodeDuplicationErrorMessage: true,
+                project: this.props.project,
+                companies: this.props.companies,
+                users: this.props.users,
+                stages: this.props.stages,
+                loading: this.props.loading,
+            })
+        } else {
+            this.setState({
+                project: this.props.project,
+                errMessage: this.props.message,
+                companies: this.props.companies,
+                users: this.props.users,
+                stages: this.props.stages,
+                loading: this.props.loading,
+            })
+        }
     }
 
     render() {
+
         let objectsList = (objects, objectIdInProject) => objects && objects.length > 0 &&
             objects.map((object, i) => {
                 return (
@@ -201,6 +239,10 @@ class ProjectForm extends React.Component {
                                    validerrormessage={<FormattedMessage id="project-page_validation-code"/>}
                                    validations={[required]}
                             />
+                            {this.state.showCodeDuplicationErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-code-duplication"/>
+                                </div>)}
                         </div>
                         <div className="col-md-6 m-0">
                             <label htmlFor="releaseDate" className={this.state.formLabelClass}>
@@ -250,7 +292,8 @@ class ProjectForm extends React.Component {
                                    name="volumeNumber"
                                    value={this.state.project.volumeNumber}
                                    onChange={this.onChangeHandle.bind(this, "volumeNumber")}
-                                   validerrormessage={<FormattedMessage id="project-page_validation-volume-number"/>}
+                                   validerrormessage={<FormattedMessage
+                                       id="project-page_validation-volume-number"/>}
                                    validations={[required]}
                             />
                         </div>
@@ -276,13 +319,16 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="company"
                                 name="company"
-                                onChange={this.onCompanyChange}
-                            >
+                                onChange={this.onCompanyChange}>
                                 <option selected={this.state.project.company.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-company-choice"/>
                                 </option>
                                 {objectsList(this.state.companies, this.state.project.company.id)}
                             </select>
+                            {this.state.showCompanyErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-company"/>
+                                </div>)}
                         </div>
                         <div className="col-md-6 m-0">
                             <label htmlFor="stage" className={this.state.formLabelClass}>
@@ -292,13 +338,17 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="stage"
                                 name="stage"
-                                onChange={this.onSelectChangeHandle.bind(this, "stage")}
+                                onChange={this.onSelectChangeHandle.bind(this, "stage", "showStageErrorMessage")}
                             >
                                 <option selected={this.state.project.stage.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-stage-choice"/>
                                 </option>
                                 {objectsList(this.state.stages, this.state.project.stage.id)}
                             </select>
+                            {this.state.showStageErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-stage"/>
+                                </div>)}
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="designer" className={this.state.formLabelClass}>
@@ -308,13 +358,17 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="designer"
                                 name="designer"
-                                onChange={this.onSelectChangeHandle.bind(this, "designer")}
+                                onChange={this.onSelectChangeHandle.bind(this, "designer", "showDesignerErrorMessage")}
                             >
                                 <option selected={this.state.project.designer.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-user-choice"/>
                                 </option>
                                 {userList(this.state.project.designer.id)}
                             </select>
+                            {this.state.showDesignerErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-designer"/>
+                                </div>)}
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="supervisor" className={this.state.formLabelClass}>
@@ -324,13 +378,17 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="supervisor"
                                 name="supervisor"
-                                onChange={this.onSelectChangeHandle.bind(this, "supervisor")}
+                                onChange={this.onSelectChangeHandle.bind(this, "supervisor", "showSupervisorErrorMessage")}
                             >
                                 <option selected={this.state.project.supervisor.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-user-choice"/>
                                 </option>
                                 {userList(this.state.project.supervisor.id)}
                             </select>
+                            {this.state.showSupervisorErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-supervisor"/>
+                                </div>)}
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="controller" className={this.state.formLabelClass}>
@@ -340,13 +398,17 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="controller"
                                 name="controller"
-                                onChange={this.onSelectChangeHandle.bind(this, "controller")}
+                                onChange={this.onSelectChangeHandle.bind(this, "controller", "showControllerErrorMessage")}
                             >
                                 <option selected={this.state.project.controller.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-user-choice"/>
                                 </option>
                                 {userList(this.state.project.controller.id)}
                             </select>
+                            {this.state.showControllerErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-controller"/>
+                                </div>)}
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="chief" className={this.state.formLabelClass}>
@@ -356,13 +418,17 @@ class ProjectForm extends React.Component {
                                 className="form-select"
                                 id="chief"
                                 name="chief"
-                                onChange={this.onSelectChangeHandle.bind(this, "chief")}
+                                onChange={this.onSelectChangeHandle.bind(this, "chief", "showChiefErrorMessage")}
                             >
                                 <option selected={this.state.project.chief.id === -1} hidden={true}>
                                     <FormattedMessage id="project_page-user-choice"/>
                                 </option>
                                 {userList(this.state.project.chief.id)}
                             </select>
+                            {this.state.showChiefErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="project-page_validation-chief"/>
+                                </div>)}
                         </div>
                         <div className="col-12">
                             <div align="end">
@@ -387,10 +453,10 @@ class ProjectForm extends React.Component {
                             </div>
                         </div>
                         <div className="col-12">
-                            {this.props.message && (
+                            {this.state.errMessage && (
                                 <div className="form-group pt-3 small">
                                     <div className="alert alert-danger p-1" role="alert">
-                                        {this.props.message}
+                                        {this.state.errMessage}
                                     </div>
                                 </div>
                             )}

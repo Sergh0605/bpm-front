@@ -69,6 +69,14 @@ class DocumentPage extends React.Component {
             response => {
                 this.setState({
                     project: response.data,
+                    document: {
+                        name: "Создание нового документа",
+                        project: response.data,
+                        documentType: {id: -1},
+                        code: "",
+                        reassemblyRequired: false,
+                        version: 1,
+                    }
                 })
                 if (this.state.c_documentId) {
                     this.refresh()
@@ -119,13 +127,13 @@ class DocumentPage extends React.Component {
         }
     }
 
-    save(document) {
+    save(document, file) {
         this.setState({
             message: "",
             loading: true,
         })
         if (this.state.c_documentId) {
-            DocumentService.update(this.state.c_projectId, this.state.c_documentId, document).then(
+            DocumentService.update(this.state.c_projectId, this.state.c_documentId, document, file).then(
                 response => {
                     this.setState({
                         document: response.data,
@@ -147,12 +155,15 @@ class DocumentPage extends React.Component {
                 }
             )
         } else {
-            DocumentService.save(this.state.c_projectId, document).then(
+            DocumentService.save(this.state.c_projectId, document, file).then(
                 response => {
-                    this.setState({
+                    window.location.assign("/project/" + response.data.project.id + "/document/" + response.data.id);
+                    /*this.setState({
+                        document: response.data,
+                        disabled: true,
                         url: "/project/" + response.data.project.id + "/document/" + response.data.id,
                         loading: false,
-                    })
+                    }*/
                 },
                 error => {
                     const resMessage =
@@ -202,6 +213,10 @@ class DocumentPage extends React.Component {
 
 
     render() {
+        let editable = false;
+        if (this.state.editable && !this.state.document.documentType.unmodified) {
+            editable = true;
+        }
         const navigateToUrl = this.navigateToUrl();
         return <div className="ps-5 pe-5">
             <div>
@@ -229,7 +244,7 @@ class DocumentPage extends React.Component {
                 <div className="col-md-6">
                     <ButtonsPanel
                         hidden={!this.state.c_documentId}
-                        editable={this.state.editable}
+                        editable={editable}
                         assembleButtonClick={this.assemble}
                         reassemblyRequired={this.state.document.reassemblyRequired}
                         downloadButtonClick={this.download}

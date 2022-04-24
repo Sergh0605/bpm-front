@@ -95,7 +95,7 @@ class ProjectList extends React.Component {
         if (this.state.data && this.state.data.content) {
             let projects = this.state.data.content
             return <div className="ps-5 pe-5">
-                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject} projectId={this.state.projectForDelete}/> : null}
+                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject} objectId={this.state.projectForDelete}/> : null}
                 <div className="row justify-content-between pt-3">
                     <div className="col-2">
                         <h4>

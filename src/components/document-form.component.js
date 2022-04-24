@@ -43,8 +43,7 @@ class DocumentForm extends React.Component {
                 code: "",
                 reassemblyRequired: false,
                 version: 1,
-            }
-
+            },
         };
     }
 
@@ -64,30 +63,73 @@ class DocumentForm extends React.Component {
         this.setState({fields})
     }
 
-    onSelectChangeHandle(field, e) {
-        let fields = this.state.project;
+    onChangeFile(e) {
+        let fields = this.state;
+        fields["file"] = e.target.files[0];
+        fields["fileName"] = e.target.value;
+        let extension = "." + e.target.value.split('.').pop();
+        fields["fileExtensionError"] = extension !== this.state.fileExtension;
+        this.setState({fields})
+    }
+
+    onSelectDocumentType(e) {
+        let fields = this.state.document;
+        fields["documentType"] = {
+            id: e.target.value
+        };
+        this.setState({fields});
+        let allFields = this.state;
+        allFields["showDocumentTypeErrorMessage"] = false;
+        let extension = ".txt";
+        if (e.target.value === "4") {
+            extension = ".txt"
+        }
+        if (e.target.value === "5") {
+            extension = ".pdf"
+        }
+        allFields["fileExtension"] = extension;
+        this.setState({allFields});
+    }
+
+    onSelectChangeHandle(field, showField, e) {
+        let fields = this.state.document;
         fields[field] = {
             id: e.target.value
         };
-        this.setState({fields})
+        this.setState({fields});
+        let allFields = this.state;
+        allFields[showField] = false;
+        this.setState({allFields});
     }
 
     onCancelHandler(e) {
         e.preventDefault();
+        this.setState({
+            showDocumentTypeErrorMessage: false,
+            fileExtensionError: false,
+        })
         this.props.cancelButtonClick();
     }
 
     onSaveHandler(e) {
         e.preventDefault();
         this.form.validateAll();
-        if (this.checkBtn.context._errors.length === 0) {
-            this.props.saveButtonClick(this.state.document);
+        if (this.state.document.documentType.id < 0) {
+            this.setState({
+                showDocumentTypeErrorMessage: true,
+            })
+        }
+        if (this.checkBtn.context._errors.length === 0 &&
+            this.state.document.documentType.id > 0 &&
+            !this.state.fileExtensionError) {
+            this.props.saveButtonClick(this.state.document, this.state.file);
         }
     }
 
     refresh() {
         this.setState({
             document: this.props.document,
+            fileExtension: ".txt",
         })
         if (this.props.project) {
             this.setState({
@@ -205,7 +247,7 @@ class DocumentForm extends React.Component {
                                    id="documentCode"
                                    name="code"
                                    value={this.state.document.code}
-                                   onChange={this.onChangeHandle.bind(this, "name")}
+                                   onChange={this.onChangeHandle.bind(this, "code")}
                                    validerrormessage={<FormattedMessage id="document-page_validation-code"/>}
                                    validations={[required]}
                             />
@@ -218,12 +260,17 @@ class DocumentForm extends React.Component {
                                 className="form-select"
                                 id="type"
                                 name="type"
-                                onChange={this.onSelectChangeHandle.bind(this, "documentType")}>
+                                disabled={this.state.document.id}
+                                onChange={this.onSelectDocumentType.bind(this)}>
                                 <option selected={this.state.document.documentType.id === -1} hidden={true}>
                                     <FormattedMessage id="document_page-type-choice"/>
                                 </option>
                                 {typesList(this.state.types, this.state.document.documentType.id)}
                             </select>
+                            {this.state.showDocumentTypeErrorMessage && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="document-page_validation-document-type"/>
+                                </div>)}
                         </div>
 
                         <div className="col-md-3 m-0">
@@ -234,7 +281,7 @@ class DocumentForm extends React.Component {
                                 className="form-select"
                                 id="designer"
                                 name="designer"
-                                onChange={this.onSelectChangeHandle.bind(this, "designer")}
+                                onChange={this.onSelectChangeHandle.bind(this, "designer", "showDocumentTypeErrorMessage")}
                             >
                                 {designerList()}
                             </select>
@@ -247,9 +294,27 @@ class DocumentForm extends React.Component {
                                 className="form-select"
                                 id="supervisor"
                                 name="supervisor"
-                                onChange={this.onSelectChangeHandle.bind(this, "supervisor")}>
+                                onChange={this.onSelectChangeHandle.bind(this, "supervisor", "showDocumentTypeErrorMessage")}>
                                 {supervisorList()}
                             </select>
+                        </div>
+                        <div className="col-12 m-0">
+                            <label htmlFor="file" className={this.state.formLabelClass}>
+                                <FormattedMessage id="document_page-file"/>
+                            </label>
+                            <Input type="file"
+                                   accept={this.state.fileExtension}
+                                   disabled={this.state.document.documentType.id < 0}
+                                   className="form-control mb-1"
+                                   id="file"
+                                   name="file"
+                                   value={this.state.fileName}
+                                   onChange={this.onChangeFile.bind(this)}
+                            />
+                            {this.state.fileExtensionError && (
+                                <div className="alert alert-danger mt-1" role="alert">
+                                    <FormattedMessage id="document-page_validation-file"/>
+                                </div>)}
                         </div>
                         <div className="col-12">
                             <div align="end">
