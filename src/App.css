@@ -293,3 +293,51 @@ a:active {
     color: #6c757d;
     font-weight: bold;
 }
+
+.user-list {
+    padding-left: 10rem !important;
+    padding-right: 10rem !important;
+}
+
+.user-login-col {
+    width: 10%;
+}
+.user-name-col {
+    width: 20%;
+}
+.user-email-col {
+    width: 25%;
+}
+.user-company-col {
+    width: 25%;
+}
+.user-role-col {
+    width: 10%;
+}
+.user-button-col {
+    width: 10%;
+}
+
+.company-name-col {
+    width: 30%;
+}
+.company-signer-col {
+    width: 30%;
+}
+.company-city-col {
+    width: 30%;
+}
+
+.history-table {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.company-table {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.errorImageSize {
+    width: 40% !important;
+}

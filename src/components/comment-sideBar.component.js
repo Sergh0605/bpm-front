@@ -108,7 +108,7 @@ class CommentSidebar extends React.Component {
                             hasMore={!this.state.isLastPage}
                             loader={<div>Загрузка...</div>}
                             dataLength={this.state.comments.length}
-                            height={600}
+                            height={550}
                         >
                             {this.state.comments.map((comment, index) => (
                                 <div key={index}>

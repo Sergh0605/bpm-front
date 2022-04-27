@@ -28,7 +28,7 @@ class ProjectService {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'project.pdf'); //TODO customize name
+                link.setAttribute('download', 'document.pdf'); //TODO customize name
                 document.body.appendChild(link);
                 link.click();
             });

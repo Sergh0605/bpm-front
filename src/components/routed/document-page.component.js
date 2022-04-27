@@ -9,6 +9,8 @@ import CommentSidebar from "../comment-sideBar.component";
 import BreadcrumbsCustom from "../breadcrumbs.component";
 import DocumentService from "../../services/document.service";
 import DocumentForm from "../document-form.component";
+import CompanyService from "../../services/company.service";
+import DocumentTypeService from "../../services/document-type.service";
 
 class DocumentPage extends React.Component {
     constructor(props) {
@@ -42,6 +44,7 @@ class DocumentPage extends React.Component {
         this.state = {
             data: "",
             formLabelClass: "form-label default-color fw-bold",
+            url:"",
             inputClass: "",
             buttonClass: "",
             loading: false,
@@ -52,10 +55,6 @@ class DocumentPage extends React.Component {
             message: "",
             document: {
                 name: "Создание нового документа",
-                project: {
-                    id: projectId,
-                    name: "",
-                },
                 documentType: {id: -1},
                 code: "",
                 reassemblyRequired: false,
@@ -65,34 +64,106 @@ class DocumentPage extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({
+            loading: true
+        })
         ProjectService.getById(this.state.c_projectId).then(
-            response => {
-                this.setState({
-                    project: response.data,
-                    document: {
-                        name: "Создание нового документа",
-                        project: response.data,
-                        documentType: {id: -1},
-                        code: "",
-                        reassemblyRequired: false,
-                        version: 1,
-                    }
-                })
-                if (this.state.c_documentId) {
-                    this.refresh()
-                }
+            prjResponse => {
+                CompanyService.getUsersById(prjResponse.data.company.id).then(
+                    usrResponse => {
+                        DocumentTypeService.getAll().then(
+                            typeResponse => {
+                                if (this.state.c_documentId) {
+                                    DocumentService.getById(this.state.c_projectId, this.state.c_documentId).then(
+                                        docResponse => {
+                                            DocumentService.getPdf(this.state.c_projectId, this.state.c_documentId).then(
+                                                pdfResponse => {
+                                                    this.setState({
+                                                        users: usrResponse.data,
+                                                        types: typeResponse.data,
+                                                        project: prjResponse.data,
+                                                        document: docResponse.data,
+                                                        pdfFile: pdfResponse.data,
+                                                        loading: false,
+                                                    });
+                                                }
+                                            )
+                                        }
+                                    );
+                                } else {
+                                    this.setState({
+                                        users: usrResponse.data,
+                                        types: typeResponse.data,
+                                        project: prjResponse.data,
+                                        document: {
+                                            name: "Создание нового документа",
+                                            project: prjResponse.data,
+                                            documentType: {id: -1},
+                                            code: "",
+                                            reassemblyRequired: false,
+                                            version: 1,
+                                        },
+                                        loading: false,
+                                    })
+                                }
+                            })
+                    })
             })
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props !== prevProps) {
+            let user = AuthService.getCurrentUser();
+            let editable = false;
+            if (user) {
+                if (user.roles.includes("EDITOR")) {
+                    editable = true;
+                }
+            }
+            let projectId;
+            let documentId;
+            if (this.props.match && this.props.match.params) {
+                projectId = this.props.match.params.projectId;
+                documentId = this.props.match.params.documentId;
+            }
+            this.setState({
+                data: "",
+                formLabelClass: "form-label default-color fw-bold",
+                url:"",
+                inputClass: "",
+                buttonClass: "",
+                loading: false,
+                disabled: this.props.disabled,
+                c_projectId: projectId,
+                c_documentId: documentId,
+                editable: editable,
+                message: "",
+                document: {
+                    name: "Создание нового документа",
+                    documentType: {id: -1},
+                    code: "",
+                    reassemblyRequired: false,
+                    version: 1,
+                }
+            });
+            if (this.state.c_projectId && this.state.c_documentId) {
+                this.refresh();
+            }
+        }
+    }
 
     refresh() {
+        this.setState({
+            loading: true
+        })
         DocumentService.getById(this.state.c_projectId, this.state.c_documentId).then(
             docResponse => {
                 DocumentService.getPdf(this.state.c_projectId, this.state.c_documentId).then(
                     pdfResponse => {
                         this.setState({
                             document: docResponse.data,
-                            pdfFile: pdfResponse.data
+                            pdfFile: pdfResponse.data,
+                            loading: false,
                         });
                     }
                 )
@@ -162,13 +233,11 @@ class DocumentPage extends React.Component {
         } else {
             DocumentService.save(this.state.c_projectId, document, file).then(
                 response => {
-                    window.location.assign("/project/" + response.data.project.id + "/document/" + response.data.id);
-                    /*this.setState({
-                        document: response.data,
-                        disabled: true,
+                    //window.location.assign("/project/" + response.data.project.id + "/document/" + response.data.id);
+                    this.setState({
                         url: "/project/" + response.data.project.id + "/document/" + response.data.id,
                         loading: false,
-                    }*/
+                    })
                 },
                 error => {
                     const resMessage =
@@ -181,8 +250,7 @@ class DocumentPage extends React.Component {
                         loading: false,
                         message: resMessage,
                     })
-                }
-            )
+                })
         }
     }
 
@@ -222,10 +290,9 @@ class DocumentPage extends React.Component {
         if (this.state.editable && !this.state.document.documentType.unmodified) {
             editable = true;
         }
-        const navigateToUrl = this.navigateToUrl();
         return <div className="ps-5 pe-5">
             <div>
-                {navigateToUrl}
+                {this.state.url ? <Navigate to={this.state.url}/> : null}
             </div>
             <div>
                 {this.state.showModal ?
@@ -242,7 +309,7 @@ class DocumentPage extends React.Component {
                                     documentId={this.state.c_documentId}/> : null}
             </div>
             <div className="mt-2">
-                <BreadcrumbsCustom object={this.state.document}/>
+                <BreadcrumbsCustom document={this.state.document} project={this.state.document.project}/>
             </div>
             <h1>{this.state.document.name}</h1>
             <div className="row g-3 custom-height">
@@ -258,9 +325,11 @@ class DocumentPage extends React.Component {
                         deleteButtonClick={this.handleShowModal}
                     />
                     <DocumentForm disabled={this.state.disabled}
-                                  project={this.state.project}
                                   document={this.state.document}
+                                  project={this.state.project}
                                   editable={this.state.editable}
+                                  users={this.state.users}
+                                  types={this.state.types}
                                   cancelButtonClick={this.cancel}
                                   saveButtonClick={this.save}
                                   loading={this.state.loading}

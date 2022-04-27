@@ -3,6 +3,16 @@ import TokenService from "./token.service";
 import AuthService from "./auth.service";
 import {API_URL} from "../properties/properties";
 
+const errorRoute = (err) => {
+    if (err.response.status === 400) {
+        return Promise.reject(err);
+    } else {
+        window.location.assign("/error/" + err.response.status);
+    }
+
+}
+
+
 const instance = axios.create({
     baseURL: API_URL,
     headers: {
@@ -35,7 +45,7 @@ instance.interceptors.response.use(
                 try {
                     let currentUser = AuthService.getCurrentUser();
                     if (currentUser.refreshExpDate && currentUser.refreshExpDate * 1000 > Date.now()) {
-                        return  axios.post(API_URL + "/user/refresh_token_auth", {
+                        return axios.post(API_URL + "/user/refresh_token_auth", {
                             token: TokenService.getLocalRefreshToken(),
                         }).then(response => {
                             console.log("tokens refreshed " + originalConfig.url)
@@ -58,10 +68,10 @@ instance.interceptors.response.use(
                     return Promise.reject(_error);
                 }
             } else {
-                return Promise.reject(err);
+                await errorRoute(err)
             }
         } else {
-            return Promise.reject(err);
+            await errorRoute(err)
         }
     }
 );

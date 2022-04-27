@@ -1,11 +1,12 @@
 import api from "./api";
 class ProjectService {
-    getAll() {
-        return api.get("/project");
+
+    getPage(pageNumber, filter) {
+        return api.get("/project?page=" + pageNumber + "&size=5&search=" + filter)
     }
 
-    getPage(pageNumber) {
-        return api.get("/project?page=" + pageNumber + "&size=5")
+    getHistoryPage(projectId, pageNumber) {
+        return api.get("/project/" + projectId + "/assemble_history?page=" + pageNumber + "&size=10")
     }
 
     assemble(id) {
@@ -22,6 +23,18 @@ class ProjectService {
 
     getPdfForDownload(id) {
         return this.getPdf(id)
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'project.pdf'); //TODO customize name
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
+
+    getHistoryPdfForDownload(projectId, id) {
+        return api.get("/project/" + projectId + "/assemble_history/" + id + "/download", {responseType: 'blob'})
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');

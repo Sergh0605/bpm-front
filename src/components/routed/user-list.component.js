@@ -1,35 +1,30 @@
-import pdfIcon from '../../images/pdf.png';
-import deleteIcon from '../../images/delete.png';
 import newProjectButton from '../../images/newProjectButton.png';
+import newUserIcon from '../../images/newUser.png'
 import React from 'react';
 import {FormattedMessage} from "react-intl";
-import ProjectService from "../../services/project.service";
-import AssembleButton from "../assemble-button.component";
-import IconButton from "../icon-button.component";
 import LinkButton from "../link-button.component";
 import {Navigate} from "react-router";
 import DeleteModal from "../modal";
 import CustomPaginator from "../custom-pagination.component";
+import UserService from "../../services/user.service";
 import ReactPaginate from "react-paginate";
+import BreadcrumbsCustom from "../breadcrumbs.component";
 
 
-class ProjectList extends React.Component {
+class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.refresh = this.refresh.bind(this);
-        this.assemble = this.assemble.bind(this);
-        this.deleteProject = this.deleteProject.bind(this);
         this.navigateToUrl = this.navigateToUrl.bind(this);
         this.setUrl = this.setUrl.bind(this);
         this.handleShowModal = this.handleShowModal.bind(this);
         this.handleHideModal = this.handleHideModal.bind(this);
-        this.onClickHandle = this.onClickHandle.bind(this);
         this.getPage = this.getPage.bind(this);
+        this.onClickHandle = this.onClickHandle.bind(this);
         this.state = {
             data: "",
-            editable: this.props.editable,
             showModal: false,
-            filter: "",
+            filter:"",
         };
     }
 
@@ -41,7 +36,7 @@ class ProjectList extends React.Component {
     }
 
     refresh(filter) {
-        ProjectService.getPage(0, filter).then(
+        UserService.getPage(0, filter).then(
             response => {
                 this.setState({
                     data: response.data,
@@ -49,15 +44,10 @@ class ProjectList extends React.Component {
                 });
             }
         );
-    }
-
-    onClickHandle(e) {
-        e.preventDefault();
-        this.refresh(this.state.filter)
     }
 
     getPage(event) {
-        ProjectService.getPage(event.selected, this.state.filter).then(
+        UserService.getPage(event.selected, this.state.filter).then(
             response => {
                 this.setState({
                     data: response.data,
@@ -65,12 +55,6 @@ class ProjectList extends React.Component {
                 });
             }
         );
-    }
-
-    navigateToUrl() {
-        if (this.state.url) {
-            return (<Navigate to={this.state.url}/>)
-        }
     }
 
     onChangeHandle(field, e) {
@@ -82,18 +66,26 @@ class ProjectList extends React.Component {
         }
     }
 
+    onClickHandle(e) {
+        e.preventDefault();
+        this.refresh(this.state.filter)
+    }
+
+    navigateToUrl() {
+        if (this.state.url) {
+            return (<Navigate to={this.state.url}/>)
+        }
+    }
+
     setUrl(url) {
         this.setState({
             url: url,
         })
     }
 
-    assemble(projectId) {
-        ProjectService.assemble(projectId).then(this.refresh);
-    }
 
-    deleteProject(projectId) {
-        ProjectService.delete(projectId).then(this.refresh);
+    deleteUser(userId) {
+        UserService.delete(userId).then(this.refresh);
     }
 
     handleHideModal() {
@@ -110,13 +102,16 @@ class ProjectList extends React.Component {
     getTable() {
         const navigateToUrl = this.navigateToUrl();
         if (this.state.data && this.state.data.content) {
-            let projects = this.state.data.content
+            let users = this.state.data.content
             return <div className="ps-5 pe-5">
-                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject} objectId={this.state.projectForDelete}/> : null}
+                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteUser} objectId={this.state.projectForDelete}/> : null}
+                <div className="mt-2">
+                    <BreadcrumbsCustom userList={true}/>
+                </div>
                 <div className="row justify-content-between pt-3">
                     <div className="col-2">
                         <h4>
-                            <FormattedMessage id="project-list_head"/>
+                            <FormattedMessage id="user-list_head"/>
                         </h4>
                     </div>
                     <form className="col-8">
@@ -137,55 +132,38 @@ class ProjectList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                        <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/project/new"}/>
+                        <LinkButton icon={newUserIcon} to={"/user/new"}/>
                     </div>
                 </div>
-                <div className="table-responsive">
+                <div className="table-responsive user-list">
                     <table className="table align-middle table-hover">
                         <thead>
                         <tr>
-                            <th scope="col" className="code-col">
-                                <FormattedMessage id="project-list_col-code"/>
+                            <th scope="col" className="user-login-col">
+                                <FormattedMessage id="user-list_col-login"/>
                             </th>
-                            <th scope="col" className="name-col">
-                                <FormattedMessage id="project-list_col-name"/>
+                            <th scope="col" className="user-name-col">
+                                <FormattedMessage id="user-list_col-name"/>
                             </th>
-                            <th scope="col" className="stage-col">
-                                <FormattedMessage id="project-list_col-stage"/>
+                            <th scope="col" className="user-email-col">
+                                <FormattedMessage id="user-list_col-email"/>
                             </th>
-                            <th scope="col" className="company-col">
-                                <FormattedMessage id="project-list_col-company"/>
+                            <th scope="col" className="user-company-col">
+                                <FormattedMessage id="user-list_col-company"/>
                             </th>
-                            <th scope="col" className="time-col">
-                                <FormattedMessage id="project-list_col-editTime"/>
+                            <th scope="col" className="user-role-col">
+                                <FormattedMessage id="user-list_col-role"/>
                             </th>
-                            <th scope="col" className="button-col"></th>
-                            <th scope="col" className="button-col"></th>
-                            <th scope="col" className="button-col"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        {projects.map((project) => (
-                            <tr key={project.id} onClick={() => this.setUrl("/project/" + project.id)}>
-                                <th scope="row">{project.code}</th>
-                                <td>{project.name}</td>
-                                <td>{project.stage.name}</td>
-                                <td>{project.company.name}</td>
-                                <td>{project.editTime}</td>
-                                <td><AssembleButton disabled={!this.state.editable} objectId={project.id}
-                                                    assembled={!project.reassemblyRequired}
-                                                    onClickHandler={this.assemble}/>
-                                </td>
-                                <td><IconButton objectId={project.id} disabled={false} icon={pdfIcon}
-                                                onClickHandler={(id) => {
-                                                    ProjectService.getPdfForDownload(id)
-                                                }}/>
-                                </td>
-                                <td><IconButton objectId={project.id}
-                                                disabled={!this.state.editable}
-                                                icon={deleteIcon}
-                                                onClickHandler={this.handleShowModal}/>
-                                </td>
+                        {users.map((user) => (
+                            <tr key={user.id} onClick={() => this.setUrl("/user/" + user.id)}>
+                                <th scope="row">{user.login}</th>
+                                <td>{user.lastName}</td>
+                                <td>{user.email}</td>
+                                {user.company ? <td>{user.company.name}</td> : <td/>}
+                                <td>{user.roles[0].name}</td>
                             </tr>
                         ))}
                         </tbody>
@@ -228,4 +206,4 @@ class ProjectList extends React.Component {
     }
 }
 
-export default ProjectList;
+export default UserList;

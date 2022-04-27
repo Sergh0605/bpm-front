@@ -3,10 +3,6 @@ import AuthService from "../../services/auth.service";
 import {Navigate} from "react-router";
 
 export default class UserAuthCheck extends Component {
-    // eslint-disable-next-line no-useless-constructor
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         let user = AuthService.getCurrentUser();
@@ -24,7 +20,9 @@ export default class UserAuthCheck extends Component {
             if (checkPassed) {
                 return (this.props.comp);
             } else {
-                //TODO move to not enough rights page
+                return (
+                    <Navigate to="/error/403"/>
+                )
             }
         }
 

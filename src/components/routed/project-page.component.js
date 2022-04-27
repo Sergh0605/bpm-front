@@ -83,7 +83,7 @@ class ProjectPage extends React.Component {
         })
         StageService.getAll().then(
             stjResponse => {
-                CompanyService.getAll().then(
+                CompanyService.getAll("").then(
                     companyResponse => {
                         if (this.state.c_projectId) {
                             ProjectService.getById(this.state.c_projectId).then(
@@ -92,14 +92,18 @@ class ProjectPage extends React.Component {
                                         compUsrResponse => {
                                             ProjectService.getPdf(this.state.c_projectId).then(
                                                 pdfResponse => {
-                                                    this.setState({
-                                                        users: compUsrResponse.data,
-                                                        project: prjResponse.data,
-                                                        companies: companyResponse.data,
-                                                        stages: stjResponse.data,
-                                                        loading: false,
-                                                        pdfFile: pdfResponse.data,
-                                                    })
+                                                    ProjectService.getDocListById(this.state.c_projectId).then(
+                                                        docListResponse => {
+                                                            this.setState({
+                                                                docList: docListResponse.data,
+                                                                users: compUsrResponse.data,
+                                                                project: prjResponse.data,
+                                                                companies: companyResponse.data,
+                                                                stages: stjResponse.data,
+                                                                loading: false,
+                                                                pdfFile: pdfResponse.data,
+                                                            });
+                                                        });
                                                 })
                                         })
                                 })
@@ -174,13 +178,8 @@ class ProjectPage extends React.Component {
         })
         if (this.state.project.id) {
             ProjectService.update(this.state.project.id, project).then(
-                response => {
-                    this.setState({
-                        project: response.data,
-                        disabled: true,
-                        loading: false
-                    })
-                },
+                () => this.refresh()
+                ,
                 error => {
                     const resMessage =
                         (error.response &&
@@ -279,7 +278,7 @@ class ProjectPage extends React.Component {
                                     projectId={this.state.c_projectId}/> : null}
             </div>
             <div className="mt-2">
-                <BreadcrumbsCustom object={this.state.project}/>
+                <BreadcrumbsCustom project={this.state.project}/>
             </div>
             <h1>{this.state.project.name}</h1>
             <div className="row g-3 custom-height">
@@ -314,6 +313,7 @@ class ProjectPage extends React.Component {
                 </div>
             </div>
             <DocumentList projectId={this.state.c_projectId}
+                          documents={this.state.docList}
                           editable={this.state.editable}
                           refreshProject={this.refresh}
                           project={this.state.project}

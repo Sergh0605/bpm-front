@@ -36,12 +36,9 @@ class DocumentList extends React.Component {
     }
 
     refresh() {
-        ProjectService.getDocListById(this.state.projectId).then(
-            response => {
-                this.setState({
-                    data: response.data,
-                });
-            });
+        this.setState({
+            data: this.props.documents,
+        });
     }
 
     navigateToUrl() {

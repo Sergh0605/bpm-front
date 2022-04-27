@@ -3,7 +3,6 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
-import StageService from "../services/stage.service";
 import CompanyService from "../services/company.service";
 
 const required = (value, props) => {
@@ -76,10 +75,18 @@ class ProjectForm extends React.Component {
                         ...this.state.project,
                         company: {
                             id: e.target.value
-                        }
+                        },
+                        designer: {id: -1},
+                        supervisor: {id: -1},
+                        controller: {id: -1},
+                        chief: {id: -1},
                     },
                     loading: false,
                     showCompanyErrorMessage: false,
+                    showDesignerErrorMessage: false,
+                    showControllerErrorMessage: false,
+                    showSupervisorErrorMessage: false,
+                    showChiefErrorMessage: false,
                 })
             });
     }
@@ -160,7 +167,7 @@ class ProjectForm extends React.Component {
     }
 
     refresh() {
-        if (this.props.message === "Can't edit project. Project with code = New code is already exists") {
+        if (this.props.message.includes("already exists")) {
             this.setState({
                 showCodeDuplicationErrorMessage: true,
                 project: this.props.project,

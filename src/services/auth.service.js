@@ -27,12 +27,9 @@ class AuthService {
     }
 
     logout() {
-        return api
-            .post("/user/logout", {}).then(() => {
-                TokenService.removeTokens();
-                window.location.assign("/login");
-            })
-
+        api.post("/user/logout", {})
+        TokenService.removeTokens();
+        window.location.assign("/login");
     }
 
     getCurrentUser() {

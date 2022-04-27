@@ -3,8 +3,6 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
-import CompanyService from "../services/company.service";
-import DocumentTypeService from "../services/document-type.service";
 
 const required = (value, props) => {
     if (!value || value < 1) {
@@ -34,10 +32,6 @@ class DocumentForm extends React.Component {
             users: [],
             document: {
                 name: "Создание нового документа",
-                project: {
-                    id: "",
-                    name: "",
-                },
                 documentFullCode: "",
                 documentType: {id: -1},
                 code: "",
@@ -130,25 +124,10 @@ class DocumentForm extends React.Component {
         this.setState({
             document: this.props.document,
             fileExtension: ".txt",
+            loading: this.props.loading,
+            users: this.props.users,
+            types: this.props.types,
         })
-        if (this.props.project) {
-            this.setState({
-                loading: true,
-            })
-            CompanyService.getUsersById(this.props.project.company.id).then(
-                usrResponse => {
-                    DocumentTypeService.getAll().then(
-                        typeResponse => {
-                            this.setState({
-                                users: usrResponse.data,
-                                types: typeResponse.data,
-                                loading: false,
-                            })
-                        }
-                    )
-                }
-            )
-        }
     }
 
     render() {
@@ -254,7 +233,7 @@ class DocumentForm extends React.Component {
                         </div>
                         <div className="col-md-6 m-0">
                             <label htmlFor="type" className={this.state.formLabelClass}>
-                                <FormattedMessage id="document_page-type"/>
+                                <FormattedMessage id="document-page_type"/>
                             </label>
                             <select
                                 className="form-select"
@@ -263,7 +242,7 @@ class DocumentForm extends React.Component {
                                 disabled={this.state.document.id}
                                 onChange={this.onSelectDocumentType.bind(this)}>
                                 <option selected={this.state.document.documentType.id === -1} hidden={true}>
-                                    <FormattedMessage id="document_page-type-choice"/>
+                                    <FormattedMessage id="document-page_type-choice"/>
                                 </option>
                                 {typesList(this.state.types, this.state.document.documentType.id)}
                             </select>
@@ -300,7 +279,7 @@ class DocumentForm extends React.Component {
                         </div>
                         <div className="col-12 m-0">
                             <label htmlFor="file" className={this.state.formLabelClass}>
-                                <FormattedMessage id="document_page-file"/>
+                                <FormattedMessage id="document-page_file"/>
                             </label>
                             <Input type="file"
                                    accept={this.state.fileExtension}

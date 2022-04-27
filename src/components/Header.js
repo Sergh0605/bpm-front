@@ -7,7 +7,11 @@ import {FormattedMessage} from "react-intl";
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {login: props.userData.currentUserLogin, roles: props.userData.currentUserRoles};
+        this.state = {
+            login: props.userData.currentUserLogin,
+            roles: props.userData.currentUserRoles,
+            id: props.userData.currentUserId,
+        };
     }
 
     getDisabledDropdownClassName() {
@@ -57,21 +61,18 @@ class Header extends React.Component {
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end"
                                     aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a className="dropdown-item" href="src/components/Header#">
+                                    <Link className="dropdown-item" to={"/user/" + this.state.id}>
                                         <FormattedMessage id="header_profile"/>
-                                    </a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
-                                           href="src/components/Header#">
+                                    </Link>
+                                    <Link className={"dropdown-item " + this.getDropdownClassName()}  to={"/user"}>
                                         <FormattedMessage id="header_users"/>
-                                    </a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
-                                           href="src/components/Header#">
+                                    </Link>
+                                    <Link className={"dropdown-item " + this.getDropdownClassName()}  to={"/company"}>
                                         <FormattedMessage id="header_companies"/>
-                                    </a></li>
-                                    <li><a className={"dropdown-item " + this.getDropdownClassName()}
-                                           href="">
+                                    </Link>
+                                    <Link className={"dropdown-item " + this.getDropdownClassName()}  to={"/log"}>
                                         <FormattedMessage id="header_log"/>
-                                    </a></li>
+                                    </Link>
                                     <li>
                                         <hr className="dropdown-divider"/>
                                     </li>
