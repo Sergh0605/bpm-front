@@ -63,7 +63,7 @@ class UserPage extends React.Component {
         this.setState({
             loading: true,
         })
-        CompanyService.getAll().then(
+        CompanyService.getAll("").then(
             companyResponse => {
                 RoleService.getAll().then(
                     roleResponse => {
@@ -92,7 +92,7 @@ class UserPage extends React.Component {
         )
     }
 
-    edit(id) {
+    edit() {
         this.setState({
             disabled: false,
         });

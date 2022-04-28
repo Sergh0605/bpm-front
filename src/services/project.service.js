@@ -1,4 +1,5 @@
 import api from "./api";
+import {downloadFile} from "../utils/common-utils";
 class ProjectService {
 
     getPage(pageNumber, filter) {
@@ -24,24 +25,14 @@ class ProjectService {
     getPdfForDownload(id) {
         return this.getPdf(id)
             .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'project.pdf'); //TODO customize name
-                document.body.appendChild(link);
-                link.click();
+                downloadFile(response);
             });
     }
 
     getHistoryPdfForDownload(projectId, id) {
         return api.get("/project/" + projectId + "/assemble_history/" + id + "/download", {responseType: 'blob'})
             .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'project.pdf'); //TODO customize name
-                document.body.appendChild(link);
-                link.click();
+                downloadFile(response);
             });
     }
 

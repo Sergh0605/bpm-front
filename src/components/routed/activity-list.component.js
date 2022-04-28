@@ -71,11 +71,17 @@ class ActivityList extends React.Component {
                     <form className="col-8">
                         <div className="row" align="center">
                             <div className="col-10">
-                                <input type="search"
-                                       className="form-control"
-                                       id="activity-search"
-                                       value={this.state.filter}
-                                       onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                <FormattedMessage id="activity-list_search-placeholder">
+                                    {
+                                        (msg) =>
+                                            <input type="search"
+                                                   placeholder={msg}
+                                                   className="form-control"
+                                                   id="activity-search"
+                                                   value={this.state.filter}
+                                                   onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                    }
+                                </FormattedMessage>
                             </div>
                             <div className="col-2" align="left">
                                 <button className="btn btn-primary mb-3 fw-bold"
@@ -107,6 +113,15 @@ class ActivityList extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+                        {activities.length === 0 ?
+                            <tr key={1}>
+                                <th scope="row"></th>
+                                <td><FormattedMessage id="lists_nothing-found"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr> : null
+                        }
                         {activities.map((activity) => (
                             <tr key={activity.id}>
                                 <th scope="row">{activity.login}</th>
@@ -129,7 +144,7 @@ class ActivityList extends React.Component {
                             marginPagesDisplayed={2}
                             previousLabel="<"
                             renderOnZeroPageCount={null}
-                            initialPage={0}
+                            initialPage={this.state.data.number}
                             pageLinkClassName="page-link"
                             className="pagination"
                             pageClassName="page-item"

@@ -1,5 +1,4 @@
 import React from "react";
-import ProjectService from "../services/project.service";
 import {Navigate} from "react-router";
 import DocumentService from "../services/document.service";
 import {FormattedMessage} from "react-intl";
@@ -106,6 +105,7 @@ class DocumentList extends React.Component {
                                 <td><IconButton objectId={doc.id}
                                                 disabled={false}
                                                 icon={pdfIcon}
+                                                titleId={"download-button_title"}
                                                 onClickHandler={(id) => {
                                                     DocumentService.getPdfForDownload(this.state.projectId, id)
                                                 }}
@@ -115,6 +115,7 @@ class DocumentList extends React.Component {
                                         <IconButton objectId={doc.id}
                                                     disabled={!this.state.editable}
                                                     icon={deleteIcon}
+                                                    titleId={"delete-button_title"}
                                                     onClickHandler={this.delete}
                                         />
                                     </div>

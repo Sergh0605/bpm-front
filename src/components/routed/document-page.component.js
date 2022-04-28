@@ -49,8 +49,8 @@ class DocumentPage extends React.Component {
             buttonClass: "",
             loading: false,
             disabled: this.props.disabled,
-            c_projectId: projectId,
-            c_documentId: documentId,
+            projectId: projectId,
+            documentId: documentId,
             editable: editable,
             message: "",
             document: {
@@ -67,16 +67,20 @@ class DocumentPage extends React.Component {
         this.setState({
             loading: true
         })
-        ProjectService.getById(this.state.c_projectId).then(
+        ProjectService.getById(this.state.projectId)
+            .then(
             prjResponse => {
-                CompanyService.getUsersById(prjResponse.data.company.id).then(
+                CompanyService.getUsersById(prjResponse.data.company.id)
+                    .then(
                     usrResponse => {
                         DocumentTypeService.getAll().then(
                             typeResponse => {
-                                if (this.state.c_documentId) {
-                                    DocumentService.getById(this.state.c_projectId, this.state.c_documentId).then(
+                                if (this.state.documentId) {
+                                    DocumentService.getById(this.state.projectId, this.state.documentId)
+                                        .then(
                                         docResponse => {
-                                            DocumentService.getPdf(this.state.c_projectId, this.state.c_documentId).then(
+                                            DocumentService.getPdf(this.state.projectId, this.state.documentId)
+                                                .then(
                                                 pdfResponse => {
                                                     this.setState({
                                                         users: usrResponse.data,
@@ -134,8 +138,8 @@ class DocumentPage extends React.Component {
                 buttonClass: "",
                 loading: false,
                 disabled: this.props.disabled,
-                c_projectId: projectId,
-                c_documentId: documentId,
+                projectId: projectId,
+                documentId: documentId,
                 editable: editable,
                 message: "",
                 document: {
@@ -146,7 +150,7 @@ class DocumentPage extends React.Component {
                     version: 1,
                 }
             });
-            if (this.state.c_projectId && this.state.c_documentId) {
+            if (this.state.projectId && this.state.documentId) {
                 this.refresh();
             }
         }
@@ -156,9 +160,11 @@ class DocumentPage extends React.Component {
         this.setState({
             loading: true
         })
-        DocumentService.getById(this.state.c_projectId, this.state.c_documentId).then(
+        DocumentService.getById(this.state.projectId, this.state.documentId)
+            .then(
             docResponse => {
-                DocumentService.getPdf(this.state.c_projectId, this.state.c_documentId).then(
+                DocumentService.getPdf(this.state.projectId, this.state.documentId)
+                    .then(
                     pdfResponse => {
                         this.setState({
                             document: docResponse.data,
@@ -172,11 +178,12 @@ class DocumentPage extends React.Component {
     }
 
     assemble() {
-        DocumentService.assemble(this.state.c_projectId, this.state.c_documentId).then(this.refresh);
+        DocumentService.assemble(this.state.projectId, this.state.documentId)
+            .then(this.refresh);
     }
 
     download() {
-        DocumentService.getPdfForDownload(this.state.c_projectId, this.state.c_documentId)
+        DocumentService.getPdfForDownload(this.state.projectId, this.state.documentId)
     }
     ;
 
@@ -186,20 +193,21 @@ class DocumentPage extends React.Component {
         });
     }
 
-    delete(id) {
-        DocumentService.delete(this.state.c_projectId, this.state.c_documentId).then(() => {
-            this.setUrl("/project/" + this.state.c_projectId)
+    delete() {
+        DocumentService.delete(this.state.projectId, this.state.documentId)
+            .then(() => {
+            this.setUrl("/project/" + this.state.projectId)
         });
     }
 
     cancel() {
-        if (this.state.c_documentId) {
+        if (this.state.documentId) {
             this.refresh();
             this.setState({
                 disabled: true,
             })
         } else {
-            this.setUrl("/project/" + this.state.c_projectId)
+            this.setUrl("/project/" + this.state.projectId)
         }
     }
 
@@ -208,8 +216,9 @@ class DocumentPage extends React.Component {
             message: "",
             loading: true,
         })
-        if (this.state.c_documentId) {
-            DocumentService.update(this.state.c_projectId, this.state.c_documentId, document, file).then(
+        if (this.state.documentId) {
+            DocumentService.update(this.state.projectId, this.state.documentId, document, file)
+                .then(
                 response => {
                     this.setState({
                         document: response.data,
@@ -231,9 +240,9 @@ class DocumentPage extends React.Component {
                 }
             )
         } else {
-            DocumentService.save(this.state.c_projectId, document, file).then(
+            DocumentService.save(this.state.projectId, document, file)
+                .then(
                 response => {
-                    //window.location.assign("/project/" + response.data.project.id + "/document/" + response.data.id);
                     this.setState({
                         url: "/project/" + response.data.project.id + "/document/" + response.data.id,
                         loading: false,
@@ -270,7 +279,7 @@ class DocumentPage extends React.Component {
         this.setState({showModal: false})
     }
 
-    handleShowModal(id) {
+    handleShowModal() {
         this.setState({
             showModal: true,
         })
@@ -299,14 +308,14 @@ class DocumentPage extends React.Component {
                     <DeleteModal show={this.state.showModal}
                                  onHide={this.handleHideModal}
                                  onAgree={this.delete}
-                                 objectId={this.state.c_documentId}/> : null}
+                                 objectId={this.state.documentId}/> : null}
             </div>
             <div>
-                {this.state.showComments && this.state.c_documentId ?
+                {this.state.showComments && this.state.documentId ?
                     <CommentSidebar show={this.state.showComments}
                                     onHide={this.handleHideComments}
-                                    projectId={this.state.c_projectId}
-                                    documentId={this.state.c_documentId}/> : null}
+                                    projectId={this.state.projectId}
+                                    documentId={this.state.documentId}/> : null}
             </div>
             <div className="mt-2">
                 <BreadcrumbsCustom document={this.state.document} project={this.state.document.project}/>
@@ -315,7 +324,7 @@ class DocumentPage extends React.Component {
             <div className="row g-3 custom-height">
                 <div className="col-md-6">
                     <ButtonsPanel
-                        hidden={!this.state.c_documentId}
+                        hidden={!this.state.documentId}
                         editable={editable}
                         assembleButtonClick={this.assemble}
                         reassemblyRequired={this.state.document.reassemblyRequired}
@@ -337,7 +346,7 @@ class DocumentPage extends React.Component {
                     />
                 </div>
                 <div className="col-md-6">
-                    {this.state.c_documentId ?
+                    {this.state.documentId ?
                         <PdfPreview pdfFile={this.state.pdfFile}/> : null}
                 </div>
             </div>

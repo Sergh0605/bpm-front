@@ -3,11 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/js/src/dropdown.js';
 import 'bootstrap/js/src/carousel.js';
 import 'bootstrap/js/src/modal.js';
-import Header from "./components/Header";
+import HeaderComponent from "./components/header.component";
 import React from "react";
-import {Redirect, Route} from "react-router-dom";
+import {Route} from "react-router-dom";
 import LoginComponent from "./components/routed/login.component";
-import ProjectList from "./components/routed/ProjectList";
+import ProjectList from "./components/routed/project-list.component";
 import {Routes, useParams} from "react-router";
 import AuthService from "./services/auth.service";
 import UserAuthCheck from "./components/routed/user-auth-check.component";
@@ -76,7 +76,7 @@ class App extends React.Component {
 
         return (
             <div>
-                <Header userData={this.state}/>
+                <HeaderComponent userData={this.state}/>
                 <Routes>
                     <Route path="/login"
                            element={<LoginComponent/>}/>

@@ -4,12 +4,21 @@ import AuthService from "./auth.service";
 import {API_URL} from "../properties/properties";
 
 const errorRoute = (err) => {
-    if (err.response.status === 400) {
-        return Promise.reject(err);
-    } else {
-        window.location.assign("/error/" + err.response.status);
+    switch (err.response.status) {
+        case 422:
+            return Promise.reject(err);
+            break;
+        case 400 || 404:
+            window.location.assign("/error/404");
+            break;
+        case 403:
+            window.location.assign("/error/403");
+        break;
+        case 500:
+            window.location.assign("/error/500");
+            break;
+        default:  window.location.assign("/error/404");
     }
-
 }
 
 
@@ -53,7 +62,7 @@ instance.interceptors.response.use(
                             TokenService.setTokens(tokens);
                             originalConfig.headers["Authorization"] = 'Bearer ' + tokens.accessToken;
                             return instance(originalConfig);
-                        }, error => {
+                        }, () => {
                             console.log("tokens refresh error " + originalConfig.url)
                             TokenService.removeTokens();
                             window.location.assign("/login");

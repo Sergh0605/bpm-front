@@ -4,7 +4,7 @@ import AuthService from "../services/auth.service";
 import {Link} from "react-router-dom";
 import {FormattedMessage} from "react-intl";
 
-class Header extends React.Component {
+class HeaderComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,7 +53,7 @@ class Header extends React.Component {
                          id="navbarNavDropdown">
                         <ul className="navbar-nav">
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle fw-bold" href="src/components/Header#"
+                                <a className="nav-link dropdown-toggle fw-bold" href="src/components/Header#header.component.js"
                                    id="navbarDropdownMenuLink"
                                    role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
@@ -90,4 +90,4 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+export default HeaderComponent;

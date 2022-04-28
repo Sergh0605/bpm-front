@@ -3,18 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
-
-const required = (value, props) => {
-    if (!value || value < 1) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                <div className="align-items-center">
-                    {props.validerrormessage}
-                </div>
-            </div>
-        );
-    }
-};
+import {extensionMismatch, required} from "../utils/validators";
 
 class CompanyForm extends React.Component {
     constructor(props) {
@@ -60,13 +49,6 @@ class CompanyForm extends React.Component {
         let fields = this.state;
         fields["file"] = e.target.files[0];
         fields["fileName"] = e.target.value;
-        if (e.target.value) {
-            let extension = "." + e.target.value.split('.').pop();
-            fields["fileExtensionError"] = !this.state.fileExtensions.includes(extension);
-        } else {
-            fields["fileExtensionError"] = "";
-        }
-
         this.setState({fields})
     }
 
@@ -88,17 +70,23 @@ class CompanyForm extends React.Component {
     }
 
     refresh() {
+        this.setState({
+            showNameDuplicationErrorMessage: false,
+            showFileMaxSizeException: false,
+            company: this.props.company,
+            loading: this.props.loading,
+            errMessage: this.props.message,
+        })
         if (this.props.message.includes("already exists")) {
             this.setState({
                 showNameDuplicationErrorMessage: true,
-                company: this.props.company,
-                loading: this.props.loading,
+                errMessage: "",
             })
-        } else {
+        }
+        if (this.props.message.includes("Maximum upload size exceeded")) {
             this.setState({
-                company: this.props.company,
-                loading: this.props.loading,
-                errMessage: this.props.message,
+                showFileMaxSizeException: true,
+                errMessage: "",
             })
         }
     }
@@ -189,10 +177,13 @@ class CompanyForm extends React.Component {
                                    name="file"
                                    value={this.state.fileName}
                                    onChange={this.onChangeFile.bind(this)}
+                                   fileExtensions={this.state.fileExtensions}
+                                   validerrormessage={<FormattedMessage id="user-page_validation-file"/>}
+                                   validations={[extensionMismatch]}
                             />
-                            {this.state.fileExtensionError && (
+                            {this.state.showFileMaxSizeException && (
                                 <div className="alert alert-danger mt-1" role="alert">
-                                    <FormattedMessage id="user-page_validation-file"/>
+                                    <FormattedMessage id="document-page_validation-file-max-size"/>
                                 </div>)}
                         </div>
                         <div className="col-12">

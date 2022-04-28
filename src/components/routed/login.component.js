@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../../services/auth.service";
 import {FormattedMessage} from "react-intl";
+import Avatar from "../../images/avatar_2x.png"
 
 const required = value => {
     if (!value) {
@@ -80,7 +81,7 @@ export default class Login extends Component {
                         <FormattedMessage id="login_label"/>
                     </h2>
                     <img
-                        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                        src={Avatar}
                         alt="profile-img"
                         className="profile-img-card"
                     />

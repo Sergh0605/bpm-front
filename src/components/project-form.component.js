@@ -4,18 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
 import CompanyService from "../services/company.service";
-
-const required = (value, props) => {
-    if (!value || value < 1) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                <div className="align-items-center">
-                    {props.validerrormessage}
-                </div>
-            </div>
-        );
-    }
-};
+import {required} from "../utils/validators";
 
 class ProjectForm extends React.Component {
     constructor(props) {

@@ -28,8 +28,18 @@ class AuthService {
 
     logout() {
         api.post("/user/logout", {})
-        TokenService.removeTokens();
-        window.location.assign("/login");
+            .then(
+                () => {
+                    console.log("logout success")
+                    TokenService.removeTokens();
+                    window.location.assign("/login");
+                },
+                () => {
+                    console.log("logout exception")
+                    TokenService.removeTokens();
+                    window.location.assign("/login");
+                }
+            )
     }
 
     getCurrentUser() {

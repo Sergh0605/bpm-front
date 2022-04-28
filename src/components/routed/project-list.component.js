@@ -9,7 +9,6 @@ import IconButton from "../icon-button.component";
 import LinkButton from "../link-button.component";
 import {Navigate} from "react-router";
 import DeleteModal from "../modal";
-import CustomPaginator from "../custom-pagination.component";
 import ReactPaginate from "react-paginate";
 
 
@@ -89,11 +88,11 @@ class ProjectList extends React.Component {
     }
 
     assemble(projectId) {
-        ProjectService.assemble(projectId).then(this.refresh);
+        ProjectService.assemble(projectId).then(() => this.refresh(this.state.filter));
     }
 
     deleteProject(projectId) {
-        ProjectService.delete(projectId).then(this.refresh);
+        ProjectService.delete(projectId).then(() => this.refresh(this.state.filter));
     }
 
     handleHideModal() {
@@ -112,7 +111,9 @@ class ProjectList extends React.Component {
         if (this.state.data && this.state.data.content) {
             let projects = this.state.data.content
             return <div className="ps-5 pe-5">
-                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject} objectId={this.state.projectForDelete}/> : null}
+                {this.state.showModal ?
+                    <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteProject}
+                                 objectId={this.state.projectForDelete}/> : null}
                 <div className="row justify-content-between pt-3">
                     <div className="col-2">
                         <h4>
@@ -122,11 +123,17 @@ class ProjectList extends React.Component {
                     <form className="col-8">
                         <div className="row" align="center">
                             <div className="col-10">
-                                <input type="search"
-                                       className="form-control"
-                                       id="activity-search"
-                                       value={this.state.filter}
-                                       onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                <FormattedMessage id="project-list_search-placeholder">
+                                    {
+                                        (msg) =>
+                                            <input type="search"
+                                                   placeholder={msg}
+                                                   className="form-control"
+                                                   id="activity-search"
+                                                   value={this.state.filter}
+                                                   onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                    }
+                                </FormattedMessage>
                             </div>
                             <div className="col-2" align="left">
                                 <button className="btn btn-primary mb-3 fw-bold"
@@ -137,7 +144,10 @@ class ProjectList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                        <LinkButton disabled={!this.state.editable} icon={newProjectButton} to={"/project/new"}/>
+                        <LinkButton disabled={!this.state.editable}
+                                    titleId={"new-project-button_title"}
+                                    icon={newProjectButton}
+                                    to={"/project/new"}/>
                     </div>
                 </div>
                 <div className="table-responsive">
@@ -165,6 +175,15 @@ class ProjectList extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+                        {projects.length === 0 ?
+                            <tr key={1}>
+                                <th scope="row"></th>
+                                <td><FormattedMessage id="lists_nothing-found"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr> : null
+                        }
                         {projects.map((project) => (
                             <tr key={project.id} onClick={() => this.setUrl("/project/" + project.id)}>
                                 <th scope="row">{project.code}</th>
@@ -176,14 +195,20 @@ class ProjectList extends React.Component {
                                                     assembled={!project.reassemblyRequired}
                                                     onClickHandler={this.assemble}/>
                                 </td>
-                                <td><IconButton objectId={project.id} disabled={false} icon={pdfIcon}
+                                <td>
+                                    <IconButton objectId={project.id}
+                                                disabled={false}
+                                                titleId={"download-button_title"}
+                                                icon={pdfIcon}
                                                 onClickHandler={(id) => {
                                                     ProjectService.getPdfForDownload(id)
                                                 }}/>
                                 </td>
-                                <td><IconButton objectId={project.id}
+                                <td>
+                                    <IconButton objectId={project.id}
                                                 disabled={!this.state.editable}
                                                 icon={deleteIcon}
+                                                titleId={"delete-button_title"}
                                                 onClickHandler={this.handleShowModal}/>
                                 </td>
                             </tr>
@@ -205,7 +230,7 @@ class ProjectList extends React.Component {
                             marginPagesDisplayed={2}
                             previousLabel="<"
                             renderOnZeroPageCount={null}
-                            initialPage={0}
+                            initialPage={this.state.data.number}
                             pageLinkClassName="page-link"
                             className="pagination"
                             pageClassName="page-item"

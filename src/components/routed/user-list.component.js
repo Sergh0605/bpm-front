@@ -1,11 +1,9 @@
-import newProjectButton from '../../images/newProjectButton.png';
 import newUserIcon from '../../images/newUser.png'
 import React from 'react';
 import {FormattedMessage} from "react-intl";
 import LinkButton from "../link-button.component";
 import {Navigate} from "react-router";
 import DeleteModal from "../modal";
-import CustomPaginator from "../custom-pagination.component";
 import UserService from "../../services/user.service";
 import ReactPaginate from "react-paginate";
 import BreadcrumbsCustom from "../breadcrumbs.component";
@@ -24,7 +22,7 @@ class UserList extends React.Component {
         this.state = {
             data: "",
             showModal: false,
-            filter:"",
+            filter: "",
         };
     }
 
@@ -85,7 +83,7 @@ class UserList extends React.Component {
 
 
     deleteUser(userId) {
-        UserService.delete(userId).then(this.refresh);
+        UserService.delete(userId).then(() => this.refresh(this.state.filter));
     }
 
     handleHideModal() {
@@ -104,7 +102,9 @@ class UserList extends React.Component {
         if (this.state.data && this.state.data.content) {
             let users = this.state.data.content
             return <div className="ps-5 pe-5">
-                {this.state.showModal ? <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteUser} objectId={this.state.projectForDelete}/> : null}
+                {this.state.showModal ?
+                    <DeleteModal show={this.state.showModal} onHide={this.handleHideModal} onAgree={this.deleteUser}
+                                 objectId={this.state.projectForDelete}/> : null}
                 <div className="mt-2">
                     <BreadcrumbsCustom userList={true}/>
                 </div>
@@ -117,11 +117,17 @@ class UserList extends React.Component {
                     <form className="col-8">
                         <div className="row" align="center">
                             <div className="col-10">
-                                <input type="search"
-                                       className="form-control"
-                                       id="activity-search"
-                                       value={this.state.filter}
-                                       onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                <FormattedMessage id="user-list_search-placeholder">
+                                    {
+                                        (msg) =>
+                                            <input type="search"
+                                                   placeholder={msg}
+                                                   className="form-control"
+                                                   id="activity-search"
+                                                   value={this.state.filter}
+                                                   onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                    }
+                                </FormattedMessage>
                             </div>
                             <div className="col-2" align="left">
                                 <button className="btn btn-primary mb-3 fw-bold"
@@ -132,7 +138,10 @@ class UserList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                        <LinkButton icon={newUserIcon} to={"/user/new"}/>
+                        <LinkButton
+                            icon={newUserIcon}
+                            titleId={"new-user-button_title"}
+                            to={"/user/new"}/>
                     </div>
                 </div>
                 <div className="table-responsive user-list">
@@ -157,6 +166,15 @@ class UserList extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+                        {users.length === 0 ?
+                            <tr key={1}>
+                                <th scope="row"></th>
+                                <td><FormattedMessage id="lists_nothing-found"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr> : null
+                        }
                         {users.map((user) => (
                             <tr key={user.id} onClick={() => this.setUrl("/user/" + user.id)}>
                                 <th scope="row">{user.login}</th>

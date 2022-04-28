@@ -9,7 +9,6 @@ import NewCommentForm from "./new-comment.component";
 class CommentSidebar extends React.Component {
     constructor(props) {
         super(props);
-        this.refresh = this.refresh.bind(this);
         this.getNextPage = this.getNextPage.bind(this);
         this.newComment = this.newComment.bind(this);
         this.state = {
@@ -20,38 +19,13 @@ class CommentSidebar extends React.Component {
     }
 
     componentDidMount() {
-        this.refresh();
+        this.getNextPage(0,10);
     }
 
-    refresh() {
+    getNextPage(pageNumber, pageSize) {
         if (this.props.projectId) {
             if (this.props.documentId) {
-                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, 0, 10).then(
-                    response => {
-                        this.setState({
-                            comments: response.data.content,
-                            isLastPage: response.data.last,
-                            currentPage: response.data.number,
-                        })
-                    }
-                )
-            } else {
-                CommentService.getByProjectIdPage(this.props.projectId, 0, 10).then(
-                    response => {
-                        this.setState({
-                            comments: response.data.content,
-                            isLastPage: response.data.last,
-                            currentPage: response.data.number,
-                        })
-                    })
-            }
-        }
-    }
-
-    getNextPage() {
-        if (this.props.projectId) {
-            if (this.props.documentId) {
-                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, this.state.currentPage + 1, 5).then(
+                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, pageNumber, pageSize).then(
                     response => {
                         this.setState({
                             comments: this.state.comments.concat(response.data.content),
@@ -61,7 +35,7 @@ class CommentSidebar extends React.Component {
                     }
                 )
             } else {
-                CommentService.getByProjectIdPage(this.props.projectId, this.state.currentPage + 1, 5).then(
+                CommentService.getByProjectIdPage(this.props.projectId, pageNumber, pageSize).then(
                     response => {
                         this.setState({
                             comments: this.state.comments.concat(response.data.content),
@@ -104,9 +78,9 @@ class CommentSidebar extends React.Component {
                     </div>
                     <div>
                         <InfiniteScroll
-                            next={this.getNextPage}
+                            next={() => this.getNextPage(this.state.currentPage + 1, 5)}
                             hasMore={!this.state.isLastPage}
-                            loader={<div>Загрузка...</div>}
+                            loader={<div><FormattedMessage id="comment_loading"/></div>}
                             dataLength={this.state.comments.length}
                             height={550}
                         >

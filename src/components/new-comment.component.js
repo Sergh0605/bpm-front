@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Form} from "react-bootstrap";
+import {FormattedMessage} from "react-intl";
 
 class NewCommentForm extends React.Component {
     constructor(props) {
@@ -44,14 +45,14 @@ class NewCommentForm extends React.Component {
             <Form>
                 <Form.Group className="mb-3"
                             controlId="commentText">
-                    <Form.Label>Новый комментарий</Form.Label>
+                    <Form.Label><FormattedMessage id="comment_new-comment"/></Form.Label>
                     <Form.Control as="textarea" rows={3} onChange={this.onChangeHandler.bind(this, "text")} value={this.state.comment.text}/>
                 </Form.Group>
                 <div align="end">
                     <Button
                         variant="primary"
                         onClick={this.onSubmitHandler}>
-                        Отправить
+                        <FormattedMessage id="comment_send"/>
                     </Button>
                 </div>
             </Form>

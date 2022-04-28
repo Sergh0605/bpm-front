@@ -1,24 +1,13 @@
 import api from "./api";
-
-const formData = (object, file) => {
-    let bodyFormData = new FormData();
-    const json = JSON.stringify(object);
-    const blob = new Blob([json], {type: 'application/json'})
-    bodyFormData.append('user', blob);
-    bodyFormData.append('file', file);
-    return bodyFormData;
-}
+import {formData} from "../utils/common-utils";
 
 class UserService {
-    getAll() {
-        return api.get("/user");
-    }
     getUser(id) {
         return api.get("/user/" + id);
     }
 
     update(userId, user, file) {
-        let bodyFormData = formData(user, file);
+        let bodyFormData = formData(user, file, 'user');
         return api.put("/user/" + userId, bodyFormData, {headers: {"Content-Type" : "multipart/form-data"}});
     }
 
@@ -31,7 +20,7 @@ class UserService {
     }
 
     save(user, file) {
-        let bodyFormData = formData(user, file);
+        let bodyFormData = formData(user, file, 'user');
         return api.post("/user/", bodyFormData, {headers: {"Content-Type" : "multipart/form-data"}});
     }
 

@@ -3,18 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
-
-const required = (value, props) => {
-    if (!value || value < 1) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                <div className="align-items-center">
-                    {props.validerrormessage}
-                </div>
-            </div>
-        );
-    }
-};
+import {extensionMismatch, required} from "../utils/validators";
 
 class DocumentForm extends React.Component {
     constructor(props) {
@@ -61,8 +50,6 @@ class DocumentForm extends React.Component {
         let fields = this.state;
         fields["file"] = e.target.files[0];
         fields["fileName"] = e.target.value;
-        let extension = "." + e.target.value.split('.').pop();
-        fields["fileExtensionError"] = extension !== this.state.fileExtension;
         this.setState({fields})
     }
 
@@ -76,12 +63,12 @@ class DocumentForm extends React.Component {
         allFields["showDocumentTypeErrorMessage"] = false;
         let extension = ".txt";
         if (e.target.value === "4") {
-            extension = ".txt"
+            extension = [".txt"]
         }
         if (e.target.value === "5") {
-            extension = ".pdf"
+            extension = [".pdf"]
         }
-        allFields["fileExtension"] = extension;
+        allFields["fileExtensions"] = extension;
         this.setState({allFields});
     }
 
@@ -121,13 +108,24 @@ class DocumentForm extends React.Component {
     }
 
     refresh() {
-        this.setState({
-            document: this.props.document,
-            fileExtension: ".txt",
-            loading: this.props.loading,
-            users: this.props.users,
-            types: this.props.types,
-        })
+        if (this.props.message.includes("Maximum upload size exceeded")) {
+            this.setState({
+                showFileMaxSizeException: true,
+                document: this.props.document,
+                loading: this.props.loading,
+                users: this.props.users,
+                types: this.props.types,
+            })
+        } else {
+            this.setState({
+                showFileMaxSizeException: false,
+                document: this.props.document,
+                loading: this.props.loading,
+                users: this.props.users,
+                types: this.props.types,
+                errMessage: this.props.message,
+            })
+        }
     }
 
     render() {
@@ -282,17 +280,20 @@ class DocumentForm extends React.Component {
                                 <FormattedMessage id="document-page_file"/>
                             </label>
                             <Input type="file"
-                                   accept={this.state.fileExtension}
+                                   accept={this.state.fileExtensions}
                                    disabled={this.state.document.documentType.id < 0}
                                    className="form-control mb-1"
                                    id="file"
                                    name="file"
                                    value={this.state.fileName}
                                    onChange={this.onChangeFile.bind(this)}
+                                   fileExtensions={this.state.fileExtensions}
+                                   validerrormessage={<FormattedMessage id="document-page_validation-file"/>}
+                                   validations={[extensionMismatch]}
                             />
-                            {this.state.fileExtensionError && (
+                            {this.state.showFileMaxSizeException && (
                                 <div className="alert alert-danger mt-1" role="alert">
-                                    <FormattedMessage id="document-page_validation-file"/>
+                                    <FormattedMessage id="document-page_validation-file-max-size"/>
                                 </div>)}
                         </div>
                         <div className="col-12">
@@ -318,10 +319,10 @@ class DocumentForm extends React.Component {
                             </div>
                         </div>
                         <div className="col-12">
-                            {this.props.message && (
+                            {this.state.errMessage && (
                                 <div className="form-group pt-3 small">
                                     <div className="alert alert-danger p-1" role="alert">
-                                        {this.props.message}
+                                        {this.state.errMessage}
                                     </div>
                                 </div>
                             )}

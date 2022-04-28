@@ -3,18 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {FormattedMessage} from "react-intl";
-
-const required = (value, props) => {
-    if (!value || value < 1) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                <div className="align-items-center">
-                    {props.validerrormessage}
-                </div>
-            </div>
-        );
-    }
-};
+import {extensionMismatch, passwordLength, required} from "../utils/validators";
 
 class UserForm extends React.Component {
     constructor(props) {
@@ -65,13 +54,6 @@ class UserForm extends React.Component {
         let fields = this.state;
         fields["file"] = e.target.files[0];
         fields["fileName"] = e.target.value;
-        if (e.target.value) {
-            let extension = "." + e.target.value.split('.').pop();
-            fields["fileExtensionError"] = !this.state.fileExtensions.includes(extension);
-        } else {
-            fields["fileExtensionError"] = "";
-        }
-
         this.setState({fields})
     }
 
@@ -122,40 +104,29 @@ class UserForm extends React.Component {
     }
 
     refresh() {
+        this.setState({
+            user: this.props.user,
+            loading: this.props.loading,
+            companies: this.props.companies,
+            types: this.props.types,
+            roles: this.props.roles,
+            showLoginDuplicationErrorMessage: false,
+            showFileMaxSizeException: false,
+            errMessage: this.props.message,
+        })
         if (this.props.message.includes("already exists")) {
             this.setState({
                 showLoginDuplicationErrorMessage: true,
-                user: this.props.user,
-                loading: this.props.loading,
-                companies: this.props.companies,
-                types: this.props.types,
-                roles: this.props.roles,
-            })
-        } else {
+                errMessage: "",
+            })}
+        if (this.props.message.includes("Maximum upload size exceeded")) {
             this.setState({
-                user: this.props.user,
-                loading: this.props.loading,
-                companies: this.props.companies,
-                types: this.props.types,
-                roles: this.props.roles,
-                errMessage: this.props.message,
-            })
+                showFileMaxSizeException: true,
+                errMessage: "",
+            })}
         }
-    }
 
     render() {
-        const passwordLength = (value, props) => {
-            if (!this.state.user.id && !value && value.length < 8) {
-                return (
-                    <div className="alert alert-danger" role="alert">
-                        <div className="align-items-center">
-                            {props.validerrormessage}
-                        </div>
-                    </div>
-                );
-            }
-        };
-
         const companies = this.state.companies;
         let companyList = (companyId) => companies && companies.length > 0 &&
             companies.map((company, i) => {
@@ -301,11 +272,14 @@ class UserForm extends React.Component {
                                    id="file"
                                    name="file"
                                    value={this.state.fileName}
+                                   fileExtensions={this.state.fileExtensions}
                                    onChange={this.onChangeFile.bind(this)}
+                                   validerrormessage={<FormattedMessage id="user-page_validation-file"/>}
+                                   validations={[extensionMismatch]}
                             />
-                            {this.state.fileExtensionError && (
+                            {this.state.showFileMaxSizeException && (
                                 <div className="alert alert-danger mt-1" role="alert">
-                                    <FormattedMessage id="user-page_validation-file"/>
+                                    <FormattedMessage id="document-page_validation-file-max-size"/>
                                 </div>)}
                         </div>
                         <div className="col-12">

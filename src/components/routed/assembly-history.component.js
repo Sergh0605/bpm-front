@@ -1,15 +1,8 @@
 import pdfIcon from '../../images/pdf.png';
-import deleteIcon from '../../images/delete.png';
-import newProjectButton from '../../images/newProjectButton.png';
 import React from 'react';
 import {FormattedMessage} from "react-intl";
 import ProjectService from "../../services/project.service";
-import AssembleButton from "../assemble-button.component";
 import IconButton from "../icon-button.component";
-import LinkButton from "../link-button.component";
-import {Navigate} from "react-router";
-import DeleteModal from "../modal";
-import CustomPaginator from "../custom-pagination.component";
 import ReactPaginate from "react-paginate";
 import projectService from "../../services/project.service";
 import BreadcrumbsCustom from "../breadcrumbs.component";
@@ -105,10 +98,22 @@ class AssemblyHistoryList extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+                        {history.length === 0 ?
+                            <tr key={1}>
+                                <th scope="row"></th>
+                                <td><FormattedMessage id="lists_nothing-found"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr> : null
+                        }
                         {history.map((assembly) => (
                             <tr key={assembly.id}>
                                 <th scope="row">{assembly.creationTime}</th>
-                                <td><IconButton objectId={assembly.id} disabled={false} icon={pdfIcon}
+                                <td><IconButton objectId={assembly.id}
+                                                disabled={false}
+                                                icon={pdfIcon}
+                                                titleId={"download-button_title"}
                                                 onClickHandler={(id) => {
                                                     ProjectService.getHistoryPdfForDownload(this.state.projectId, id)
                                                 }}/>

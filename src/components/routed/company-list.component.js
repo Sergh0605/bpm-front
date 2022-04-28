@@ -4,8 +4,6 @@ import {FormattedMessage} from "react-intl";
 import LinkButton from "../link-button.component";
 import {Navigate} from "react-router";
 import DeleteModal from "../modal";
-import CustomPaginator from "../custom-pagination.component";
-import UserService from "../../services/user.service";
 import CompanyService from "../../services/company.service";
 import BreadcrumbsCustom from "../breadcrumbs.component";
 
@@ -99,11 +97,17 @@ class CompanyList extends React.Component {
                     <form className="col-8">
                         <div className="row" align="center">
                             <div className="col-10">
-                                <input type="search"
-                                       className="form-control"
-                                       id="activity-search"
-                                       value={this.state.filter}
-                                       onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                <FormattedMessage id="company-list_search-placeholder">
+                                    {
+                                        (msg) =>
+                                            <input type="search"
+                                                   placeholder={msg}
+                                                   className="form-control"
+                                                   id="company-search"
+                                                   value={this.state.filter}
+                                                   onChange={this.onChangeHandle.bind(this, "filter")}/>
+                                    }
+                                </FormattedMessage>
                             </div>
                             <div className="col-2" align="left">
                                 <button className="btn btn-primary mb-3 fw-bold"
@@ -114,7 +118,10 @@ class CompanyList extends React.Component {
                         </div>
                     </form>
                     <div className="col-1 me-2" align="right">
-                        <LinkButton icon={newCompanyIcon} to={"/company/new"}/>
+                        <LinkButton
+                            icon={newCompanyIcon}
+                            titleId={"new-company-button_title"}
+                            to={"/company/new"}/>
                     </div>
                 </div>
                 <div className="table-responsive company-table">
@@ -133,6 +140,15 @@ class CompanyList extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+                        {companies.length === 0 ?
+                            <tr key={1}>
+                                <th scope="row"></th>
+                                <td><FormattedMessage id="lists_nothing-found"/></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr> : null
+                        }
                         {companies.map((company) => (
                             <tr key={company.id} onClick={() => this.setUrl("/company/" + company.id)}>
                                 <th scope="row">{company.name}</th>
