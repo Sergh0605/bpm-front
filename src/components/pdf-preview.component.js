@@ -1,6 +1,4 @@
 import React from "react";
-import ProjectService from "../services/project.service";
-import DocumentService from "../services/document.service";
 
 const PDFJS = require("pdfjs-dist/webpack");
 
@@ -83,7 +81,7 @@ class PdfPreview extends React.Component {
                         {this.state.loading && (
                             <span className="spinner-border spinner-border-sm"/>
                         )}
-                        <div className="carousel-indicators" hidden={true}>
+                        <div className="carousel-indicators" hidden={false}>
                             {this.state.imgArray.map((image, index) => {
                                 return (
                                     <button
