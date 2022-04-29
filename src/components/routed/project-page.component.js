@@ -88,6 +88,9 @@ class ProjectPage extends React.Component {
                         if (this.state.c_projectId) {
                             ProjectService.getById(this.state.c_projectId).then(
                                 prjResponse => {
+                                    if (prjResponse.data.deleted) {
+                                        window.location.assign("/error/404");
+                                    }
                                     CompanyService.getUsersById(prjResponse.data.company.id).then(
                                         compUsrResponse => {
                                             ProjectService.getPdf(this.state.c_projectId).then(

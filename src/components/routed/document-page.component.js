@@ -163,6 +163,9 @@ class DocumentPage extends React.Component {
         DocumentService.getById(this.state.projectId, this.state.documentId)
             .then(
             docResponse => {
+                if (docResponse.data.deleted) {
+                    window.location.assign("/error/404");
+                }
                 DocumentService.getPdf(this.state.projectId, this.state.documentId)
                     .then(
                     pdfResponse => {
