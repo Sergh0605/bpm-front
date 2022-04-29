@@ -230,6 +230,7 @@ class ProjectForm extends React.Component {
                                    className="form-control mb-1"
                                    id="projectCode"
                                    name="code"
+                                   maxlength="30"
                                    value={this.state.project.code}
                                    onChange={this.onChangeHandle.bind(this, "code")}
                                    validerrormessage={<FormattedMessage id="project-page_validation-code"/>}
@@ -286,6 +287,7 @@ class ProjectForm extends React.Component {
                                    className="form-control mb-1"
                                    id="volumeNumber"
                                    name="volumeNumber"
+                                   max="1000"
                                    value={this.state.project.volumeNumber}
                                    onChange={this.onChangeHandle.bind(this, "volumeNumber")}
                                    validerrormessage={<FormattedMessage
@@ -309,7 +311,7 @@ class ProjectForm extends React.Component {
                         </div>
                         <div className="col-md-6 m-0">
                             <label htmlFor="company" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-company"/>
+                                <FormattedMessage id="project_page-company"/> *
                             </label>
                             <select
                                 className="form-select"
@@ -328,7 +330,7 @@ class ProjectForm extends React.Component {
                         </div>
                         <div className="col-md-6 m-0">
                             <label htmlFor="stage" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-stage"/>
+                                <FormattedMessage id="project_page-stage"/> *
                             </label>
                             <select
                                 className="form-select"
@@ -348,7 +350,7 @@ class ProjectForm extends React.Component {
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="designer" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-designer"/>
+                                <FormattedMessage id="project_page-designer"/> *
                             </label>
                             <select
                                 className="form-select"
@@ -368,7 +370,7 @@ class ProjectForm extends React.Component {
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="supervisor" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-supervisor"/>
+                                <FormattedMessage id="project_page-supervisor"/> *
                             </label>
                             <select
                                 className="form-select"
@@ -383,12 +385,12 @@ class ProjectForm extends React.Component {
                             </select>
                             {this.state.showSupervisorErrorMessage && (
                                 <div className="alert alert-danger mt-1" role="alert">
-                                    <FormattedMessage id="project-page_validation-supervisor"/>
+                                    <FormattedMessage id="project-page_validation-supervisor"/> *
                                 </div>)}
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="controller" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-controller"/>
+                                <FormattedMessage id="project_page-controller"/> *
                             </label>
                             <select
                                 className="form-select"
@@ -408,7 +410,7 @@ class ProjectForm extends React.Component {
                         </div>
                         <div className="col-md-3 m-0">
                             <label htmlFor="chief" className={this.state.formLabelClass}>
-                                <FormattedMessage id="project_page-chief"/>
+                                <FormattedMessage id="project_page-chief"/> *
                             </label>
                             <select
                                 className="form-select"

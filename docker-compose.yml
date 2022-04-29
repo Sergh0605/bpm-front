@@ -1,0 +1,15 @@
+version: "3"
+services:
+  front:
+    build:
+      context: .
+    container_name: bpm_front
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external:
+      name: bpm-front

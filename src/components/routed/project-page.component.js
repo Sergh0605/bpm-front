@@ -175,6 +175,7 @@ class ProjectPage extends React.Component {
         this.setState({
             message: "",
             loading: true,
+            disabled: true,
         })
         if (this.state.project.id) {
             ProjectService.update(this.state.project.id, project).then(

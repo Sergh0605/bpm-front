@@ -197,6 +197,7 @@ class DocumentForm extends React.Component {
                                    className="form-control mb-1"
                                    id="documentName"
                                    name="name"
+                                   maxlength="200"
                                    value={this.state.document.name}
                                    onChange={this.onChangeHandle.bind(this, "name")}
                                    validerrormessage={<FormattedMessage id="document-page_validation-name"/>}
@@ -223,6 +224,7 @@ class DocumentForm extends React.Component {
                                    className="form-control mb-1"
                                    id="documentCode"
                                    name="code"
+                                   maxlength="20"
                                    value={this.state.document.code}
                                    onChange={this.onChangeHandle.bind(this, "code")}
                                    validerrormessage={<FormattedMessage id="document-page_validation-code"/>}

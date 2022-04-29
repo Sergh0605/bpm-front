@@ -2,7 +2,6 @@ import assembledIcon from '../images/assembled.png';
 import needToAssemble from '../images/needToAssemble.png';
 import React from 'react';
 import IconButton from "./icon-button.component";
-
 class AssembleButton extends React.Component {
 
     render() {
