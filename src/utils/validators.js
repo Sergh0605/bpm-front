@@ -28,7 +28,7 @@ export const extensionMismatch = (value, props) => {
 }
 
 export const passwordLength = (value, props) => {
-    if (!props.disabled && !value && value.length < 8) {
+    if (!props.disabled && (!value || value.length) < 8) {
         return (
             <div className="alert alert-danger" role="alert">
                 <div className="align-items-center">

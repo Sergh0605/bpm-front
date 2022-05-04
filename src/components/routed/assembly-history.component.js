@@ -69,7 +69,7 @@ class AssemblyHistoryList extends React.Component {
                             <FormattedMessage id="history-list_head"/>
                         </h4>
                     </div>
-                    <form className="col-8">
+                    <form className="col-8" hidden={true}>
                         <div className="row" align="center">
                             <div className="col-10">
                                 <input type="search" className="form-control" id="bpm-search" placeholder=""/>

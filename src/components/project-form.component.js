@@ -230,7 +230,7 @@ class ProjectForm extends React.Component {
                                    className="form-control mb-1"
                                    id="projectCode"
                                    name="code"
-                                   maxlength="30"
+                                   maxLength="30"
                                    value={this.state.project.code}
                                    onChange={this.onChangeHandle.bind(this, "code")}
                                    validerrormessage={<FormattedMessage id="project-page_validation-code"/>}

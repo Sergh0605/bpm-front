@@ -7,7 +7,6 @@ const errorRoute = (err) => {
     switch (err.response.status) {
         case 422:
             return Promise.reject(err);
-            break;
         case 400 || 404:
             window.location.assign("/error/404");
             break;

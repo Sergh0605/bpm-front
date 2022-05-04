@@ -11,6 +11,7 @@ class CommentSidebar extends React.Component {
         super(props);
         this.getNextPage = this.getNextPage.bind(this);
         this.newComment = this.newComment.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.state = {
             comments: [],
             isLastPage: false,
@@ -20,6 +21,31 @@ class CommentSidebar extends React.Component {
 
     componentDidMount() {
         this.getNextPage(0,10);
+    }
+
+    refresh() {
+        if (this.props.projectId) {
+            if (this.props.documentId) {
+                CommentService.getByDocumentIdPage(this.props.projectId, this.props.documentId, 0, 10).then(
+                    response => {
+                        this.setState({
+                            comments: response.data.content,
+                            isLastPage: response.data.last,
+                            currentPage: response.data.number,
+                        })
+                    }
+                )
+            } else {
+                CommentService.getByProjectIdPage(this.props.projectId, 0, 10).then(
+                    response => {
+                        this.setState({
+                            comments: response.data.content,
+                            isLastPage: response.data.last,
+                            currentPage: response.data.number,
+                        })
+                    })
+            }
+        }
     }
 
     getNextPage(pageNumber, pageSize) {

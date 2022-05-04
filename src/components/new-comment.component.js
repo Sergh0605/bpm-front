@@ -29,6 +29,13 @@ class NewCommentForm extends React.Component {
                             text: "",
                         }
                     })
+                },
+                () => {
+                    this.setState({
+                        comment: {
+                            text: "",
+                        }
+                    })
                 }
             )
         }
@@ -46,7 +53,8 @@ class NewCommentForm extends React.Component {
                 <Form.Group className="mb-3"
                             controlId="commentText">
                     <Form.Label><FormattedMessage id="comment_new-comment"/></Form.Label>
-                    <Form.Control as="textarea" rows={3} onChange={this.onChangeHandler.bind(this, "text")} value={this.state.comment.text}/>
+                    <Form.Control as="textarea" rows={3} onChange={this.onChangeHandler.bind(this, "text")}
+                                  value={this.state.comment.text}/>
                 </Form.Group>
                 <div align="end">
                     <Button
